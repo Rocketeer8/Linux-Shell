@@ -1,0 +1,10 @@
+Class name: Tree
+Parent class (if any): OutputCommand
+Subclasses (if any): None
+
+Responsibilities:
+*Displaying the contents of the entire filesystem on the JShell
+
+Collaborators:
+*FileSystem
+*FileObj

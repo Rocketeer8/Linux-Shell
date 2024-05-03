@@ -1,0 +1,9 @@
+Class name: Output
+Parent class (if any): None
+Subclasses (if any): ErrorOutput
+
+Responsibilities:
+*Display output to user
+
+Collaborators:
+*None

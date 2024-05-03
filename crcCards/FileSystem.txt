@@ -1,0 +1,15 @@
+Class name: FileSystem
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Holds a list of commands that are valid in the shell
+*Holds the root directory
+*Holds the working directory
+*Holds history of commands
+*Holds a stack of recent directories
+
+Collaborators:
+*InputParser
+*StandardError
+*PathHandler

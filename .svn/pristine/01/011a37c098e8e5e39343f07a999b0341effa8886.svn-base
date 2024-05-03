@@ -1,0 +1,127 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import commands.RetrieveUrl;
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.Scanner;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class RetrieveUrlTest {
+
+  FileSystem fileSystem;
+  RetrieveUrl curl;
+  URL url;
+  File urlFile;
+
+  @Before
+  public void setUp() throws Exception {
+    fileSystem = FileSystem.getInstance();
+    curl = new RetrieveUrl(new int[] {1});
+    url = new URL("http://www.cs.cmu.edu/~spok/grimmtmp/073.txt");
+    urlFile = new File("073txt");
+
+    Scanner scanner = new Scanner(url.openStream());
+    StringBuilder fileContent = new StringBuilder();
+
+    while (scanner.hasNext()) {
+      fileContent.append(scanner.nextLine()).append("\n");
+    }
+
+    urlFile.addToTextContent(fileContent.toString());
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    Field field =
+        (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+
+    // Checks case with no arg
+    assertNull(curl.execute(new String[]{}));
+
+    // Checks case with multiple args, arg types do not matter
+    assertNull(curl.execute(new String[]{"1 ?"}));
+  }
+
+  @Test
+  public void testExecuteWithValidArg() {
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String urlName = "http://www.cs.cmu.edu/~spok/grimmtmp/073.txt";
+
+    // Creates the file to be tested
+    File outputUrlFile = curl.execute(new String[] {urlName});
+
+    // Checks if file is in workingDir, and is equal to it
+    assertEquals(outputUrlFile, workingDir.getSubFile(outputUrlFile.getName()));
+
+    // Checks if it has expected name and content
+    assertEquals(urlFile.getName(), outputUrlFile.getName());
+    assertEquals(urlFile.toString(), outputUrlFile.toString());
+  }
+
+  @Test
+  public void testExecuteWithAFileWithSameNameInFileSystem() {
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String urlName = "http://www.cs.cmu.edu/~spok/grimmtmp/073.txt";
+
+    // Creates an existing file with same name and different content
+    urlFile.clearTextContent();
+    urlFile.addToTextContent("Expected Output");
+    urlFile.setParentDirectory(workingDir);
+    workingDir.addToDir(urlFile);
+
+    // Checks that method catches that file with that name already exists
+    assertNull(curl.execute(new String[] {urlName}));
+
+    // Checks that the original file in the file system was not overwritten
+    assertEquals(urlFile.toString(),
+        workingDir.getSubFile(urlFile.getName()).toString());
+  }
+
+  @Test
+  public void testExecuteWithADirectoryWithSameNameInFileSystem() {
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String urlName = "http://www.cs.cmu.edu/~spok/grimmtmp/073.txt";
+
+    // Creates a directory with the same name
+    Directory testDir = new Directory("073txt");
+    testDir.setParentDirectory(workingDir);
+    workingDir.addToDir(testDir);
+
+    // Checks that method catches that dir with that name already exists
+    assertNull(curl.execute(new String[] {urlName}));
+  }
+
+  @Test
+  public void testExecuteWithInvalidUrlArg() {
+
+    // Checks url is invalid
+    String urlName = "a";
+    assertNull(curl.execute(new String[] {urlName}));
+
+    // Checks that no file is found
+    urlName = "https:///";
+    assertNull(curl.execute(new String[] {urlName}));
+  }
+
+  @Test
+  public void testExecuteWithValidArgThatHasNoContents() {
+    String urlName = "http://www.cs.cmu.edu/~spok/grimmtmp/073.txt/";
+
+    // Checks that there is no corresponding file contents
+    assertNull(curl.execute(new String[] {urlName}));
+  }
+}

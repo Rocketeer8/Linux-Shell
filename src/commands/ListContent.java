@@ -1,0 +1,196 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileObj;
+import filesystem.FileSystem;
+import handling.InputParser;
+import java.util.Arrays;
+import output.Output;
+
+
+/**
+ * This class is responsible for listing content given directory/file paths on
+ * the shell.
+ * 
+ * @author Marcus, Danny
+ *
+ */
+public class ListContent extends OutputCommand {
+
+  /**
+   * Sets up the valid argument counts for listContent and its
+   * documentation.
+   * 
+   * @param validArgumentCounts Stores All the valid number of Argument counts
+   *        for changeDirecotry
+   */
+  public ListContent(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "ls [PATH...]"
+        + "\n\tIf no paths are given, print the contents (file or directory) "
+        + "\n\tof the current directory, with a new line following each of the "
+        + "\n\tcontent (file or directory)."
+        + "\n\n\tOtherwise, for each path p, the order listed:"
+        + "\n\n\t  • If p specifies a file, print p"
+        + "\n\n\t  • If p specifies a directory, print p, a colon, then the "
+        + "\n\t    contents of that directory, then an extra new line."
+        + "\n\n\t  • If p does not exist, print a suitable message."
+        + "\n\n\tIf -R is present, recursively list all subdirectories.";
+
+  }
+
+
+  /**
+   * Given a list of files/directories, list their content one by one. With the
+   * help of parser to get the directory and for potential errors. For a file,
+   * listContent prints its name, for directory, listContent prints its
+   * subfiles.
+   * 
+   * @param shellInput Arrays of command arguments
+   * @return  the contents of the designated files in string
+   */
+  public String execute(String[] shellInput) {
+
+    FileSystem fileSystem = FileSystem.getInstance();
+    String output = "";
+    // split the arguments, and check if the counts is correct.
+    String[] arguments = super.getArguments(shellInput);
+    super.execute(arguments);
+    if (!isCountValid || (hasRedirect() && outFile == null)) {
+      // invalid argument counts or invalid outFile
+      return null;
+    }
+    boolean recursiveList = false;
+
+    if (arguments.length > 0 && arguments[0].equals("-R")) {
+      recursiveList = true;
+      // remove recursive symbol from array
+      arguments = Arrays.copyOfRange(arguments, 1, arguments.length);
+    }
+
+    // if no argument is given, list content of the current directory.
+    if (arguments.length == 0) {
+      if (recursiveList) {
+        output = getRecursiveSubFiles(fileSystem.getWorkingDirectory());
+        handleOutput(output);
+      } else {
+        output = getSubFiles(fileSystem.getWorkingDirectory());
+        handleOutput(output);
+      }
+    } else {
+      output = lsHelper(arguments, recursiveList);
+    }
+    return output;
+  }
+
+
+  /**
+   * Helper for execute to list content of a directory/directories given their
+   * path.
+   * 
+   * @param shellInput Arrays of command arguments
+   * @param recursiveList if the listing has recursion or not
+   * @return String content of files/directories to be listed
+   */
+  private String lsHelper(String[] arguments, boolean recursiveList) {
+    String output = "";
+    InputParser parser = FileSystem.getInstance().getParser();
+    for (String path : arguments) {
+      // get target dir/file to list content
+      FileObj fileObject = parser.parsePathToFileObj(path);
+
+      // if the fileObject doesn't exist, return.
+      if (fileObject == null) {
+        return null;
+      }
+
+      if (fileObject instanceof File) {
+        // for a file, output the path
+        handleOutput(path);
+      } else {
+        // for a directory, output path then all its content
+        handleOutput(path + ":");
+        if (recursiveList) {
+          output = getRecursiveSubFiles((Directory) fileObject);
+          handleOutput(output);
+        } else {
+          output = getSubFiles((Directory) fileObject);
+          handleOutput(output);
+        }
+      }
+    }
+    return output;
+  }
+
+
+  /**
+   * A helper method for recursively listing contents of a directory.
+   * 
+   * @param dir The directory where its subfiles will be listed
+   * @return String content of files/directories to be listed
+   */
+  private String getRecursiveSubFiles(Directory dir) {
+    // startingDepth is the depth of all subFiles or dir(not recursive ones)
+    int startingDepth = dir.getDepth() + 1;
+    Output tempOutput = new Output();
+    for (FileObj file : dir) {
+      /*
+       * get the current file depth by using starting file depth as a starting
+       * point
+       */
+      int curFileDepth = file.getDepth() - startingDepth;
+      String suitableIndent = "  ".repeat(curFileDepth);
+      tempOutput.storeOutput(suitableIndent + file.getName() + "\n");
+    }
+    return tempOutput.releaseStoredOutput();
+  }
+
+
+  /**
+   * A helper method for listing contents of a directory.
+   * 
+   * @param dir The directory where its subfiles will be listed
+   * @return String content of files/directories to be listed
+   */
+  private String getSubFiles(Directory dir) {
+    Output tempOutput = new Output();
+    // store directory content one by one
+    for (FileObj file : dir.getSubFiles()) {
+      tempOutput.storeOutput(file.getName() + "\n");
+    }
+    // return the directory contents in one string
+    return tempOutput.releaseStoredOutput();
+  }
+
+}

@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - discuss with team changes needed for the execute method inside commands
+    - designed how to implement RemoveDirectory, CopyDirectory and MoveDirectory
+    - began implementing RemoveDirectory
+
+What do I plan to work in the next three days?
+    - finish implementing RemoveDirectory
+    - begin implementing MoveDirectory and CopyDirectory
+    - add comments and javadoc to the new classes
+
+Am I blocked on anything?
+    - Nothing at the moment. I will implement RemoveDirectory and CopyDirectory then implement MoveDirectory using RemoveDirectory and CopyDirectory

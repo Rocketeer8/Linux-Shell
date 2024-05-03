@@ -1,0 +1,51 @@
+Sprint 1 Backlog.  
+October 21st (12:01 am) to October 27th (11:59 pm)
+
+
+User Stories from Product Backlog that we will address in this sprint:
+a) As a user, I can execute a command
+b) As a user, I can create at most 2 directories in any directory
+c) As a user, I can create a file
+d) As a user, I can edit a file
+e) As a user, I can change my current directory
+f) As a user, I can keep track of my recent directories			
+g) As a user, I can keep track of my recent command(s) 
+h) As a user, I can display the path of a file or directory
+i) As a user, I can display the content of any directory/directories
+
+
+Specific tasks to be accomplished:
+
+a-1. (Command) Finish the Abstract Command class and the corresponding abstract methods
+a-2. (StandardError) Finish the StandardError (error handling) class
+a-3. (StandardError) Give the user an error message if the input is invalid
+a-4. Complete CRC cards for updated design
+a-5. (InputParser) Parse the input into an object the program can handle
+b-1. (MakeDirectory) Update MakeDirectory to work with only two directories
+c-1. (Echo) Finish the Echo class for creating files and calling EchoAppend or EchoOverwrite
+d-1. (EchoAppend) Finish a method in EchoAppend for appending to a file
+d-2. (EchoOverwrite) Finish the EchoOverwrite class for overwriting files
+e-1. (ChangeDirectory) Implement the ChangeDirectory class (finish execute method) to change the working directory
+f-1. (Shell) Implement the Shell class for keeping track of root, working, and recent directories 
+f-2. (PushDirectory) Implement PushDirectory class for storing recent directories
+g-1. (Shell) Add a list for keeping track of recent commands 
+g-2. (History) Implement the History class for printing recent commands
+h-1. (PathHandling) Implement the PathHandling class for traversing through the file system 
+h-2. (ListFile) Implement the ListFile class for printing the path of a file
+h-3. (PrintWorkingDirectory) Implement the PrintWorkingDirectory class for printing the path of the working directory
+i-1. (ListFile) Implement the ListFile class for listing the contents of a directory or directories
+
+
+These tasks are assigned as follows:
+
+User: Marcus Pasquariello
+Tasks: a-1, a-2, a-3, f-1, g-1, a-5
+
+User: Brandon Lam
+Tasks: a-4, b-1, e-1, h-1
+
+User: Aliel Jacob Roxas
+Tasks: d-1, f-2, g-2, h-3
+
+User: Danny Liu
+Tasks: c-1, d-2, h-2, i-1

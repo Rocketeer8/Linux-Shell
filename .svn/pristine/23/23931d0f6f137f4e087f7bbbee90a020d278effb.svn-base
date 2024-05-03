@@ -1,0 +1,37 @@
+package commands;
+
+import filesystem.FileObj;
+import filesystem.FileSystem;
+
+public class Tree extends Command {
+
+  private static final long serialVersionUID = 1L;
+
+  public Tree(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+  }
+
+  @Override
+  public void execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+    FileSystem fileSystem = FileSystem.getInstance();
+
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+
+    System.out.println("/");
+    
+    for (FileObj subFileObj : fileSystem.getRootDirectory()) {
+      for (int i = 0; i < subFileObj.getDepth(); i++) {
+        System.out.print("   ");
+      }
+      System.out.println(subFileObj.getName());
+    }
+
+
+  }
+
+}

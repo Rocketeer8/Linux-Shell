@@ -1,0 +1,14 @@
+Class name: StandardError
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Output error message if invalid user input is given
+
+Collaborators:
+*JShell
+*FileSystem
+*Directory
+*File
+*FileObj
+*ErrorOutput

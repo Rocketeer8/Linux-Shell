@@ -1,0 +1,10 @@
+Class name: LoadJShell
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Loading a previously saved Shell
+
+Collaborators:
+*FileSystem
+*ErrorOutput

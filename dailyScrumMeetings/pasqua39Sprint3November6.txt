@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+	-Implemented the Manual class for printing documentation
+	-Implementer Concatenate class for printing file content
+
+What do I plan to work in the next three days?
+	-Complete javadoc for InputParser and StandardError
+	-Clean up code
+	-Make small changes to design according to TAs requests
+
+Am I blocked on anything?
+   	-Not blocked on anything

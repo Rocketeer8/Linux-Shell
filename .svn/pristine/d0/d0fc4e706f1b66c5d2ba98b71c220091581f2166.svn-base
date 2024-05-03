@@ -1,0 +1,87 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package driver;
+
+import java.util.Stack;
+import commands.Command;
+import commands.MakeDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+import handling.InputParser;
+import handling.PathHandler;
+import handling.StandardError;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+/**
+ * The JShell class takes in the user input, and calls the appropriate methods
+ * for executing the command.
+ * 
+ * @author Marcus
+ *
+ */
+public class JShell {
+
+
+  /**
+   * Takes in the user input, parses the input into the command and its
+   * arguments. If the command is valid, call the appropriate execute method,
+   * otherwise prints an error message.
+   * 
+   */
+  public static void main(String[] args) {
+
+    Scanner scanner = new Scanner(System.in);
+    FileSystem fileSystem = FileSystem.getInstance();
+    StandardError errorHandler = fileSystem.getErrorHandler();
+
+
+    while (true) {
+      String input = scanner.nextLine();
+      if (input.isBlank()) {
+        continue;
+      }
+
+      String[] inputList = input.trim().split("\\s+", 2);
+      String commandName = inputList[0];
+      fileSystem.getCommandHistory().add(input);
+      if (errorHandler.isValidCommand(commandName)) {
+        Command command = fileSystem.getCommands().get(commandName);
+        command.execute(Arrays.copyOfRange(inputList, 1, inputList.length));
+      }
+
+    }
+  }
+
+
+}

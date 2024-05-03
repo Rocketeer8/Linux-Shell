@@ -1,0 +1,113 @@
+==== A2 phase I marking ====
+
+Group number: 0434
+UTORID usernames of members: lambran3,liuhai6,pasqua39,roxasal1
+Total deductions: 1
+Grade: A (89%)
+
+Your team's Phase II grade is based on this scale:
+
+    https://transcripts.utoronto.ca/faqs/grade-scale/
+When converting from letter grade to numerical grade, we will use the higher end of the letter grade to convert your mark.
+--For example, the higher end of A+ is 100.
+--For example, the higher end of A is 89.
+.
+.
+.
+In the event that you get a F, your conversion from letter grade to numerical grade will be based on the discretion of the instructor. 
+
+The way we graded is as follows: your team starts with an A+. When errors and
+problems are found, you will lose 0, 1, 2, or 3 letter steps, depending on the
+severity. As an example, if you lost two steps, your team would earn an A-:
+
+     A+ -> A
+     A -> A-
+
+You were asked to follow the Scrum process. A big part of that is to maintain
+a product backlog and a sprint backlog. 
+
+==== Product and Sprint backlogs ==== [up to -6]
+
+Several steps can be lost for these kinds of issues:
+
+- [ ]  No evidence of Product or Sprint backlog -6
+- [ ]  No evidence of team assigning tasks to team members -3
+- [ ]  SB items not taken directly from PB -1
+- [ ]  SB items not broken down into smaller steps -1
+- [ ]  PB, SB uses noticeably bad grammar and/or spelling -2
+
+TA COMMENTS: 
+
+==== Java Style ==== [up to -6]
+
+Steps can be lost for these kinds of issues:
+
+- [ ]  Java naming conventions not followed (camelCase, no_underscores) -1
+- [ ]  Instance variable names not meaningful (e.g., "Label1" is not a good name) -1
+- [ ]  Bad indentation -1
+- [ ]  Lack of consistency in style across files -1
+- [ ]  Bad use of whitespace: too much or too little -1
+- [ ]  Class names are frequently not noun phrases -1
+- [ ]  Method names are frequently not verb phrases -1
+- [ ]  Not following the 80character column width limit. -1
+
+TA COMMENTS: 
+
+==== Design ==== [up to -6]
+
+Several steps can be lost for these kinds of issues:
+
+- [ ]  public instance variables instead of setters and getters -1 to -2
+- [x]  not a good breakdown of classes and methods (everything static;) -1
+- [ ]  long methods exist (more than roughly 30 lines from brace to brace) -1
+- [ ]  hard to add new commands -1
+- [ ]  no unified path handling mechanism -2
+- [ ]  redirection doesn't easily incorporate new commands -2
+
+TA COMMENTS:
+ - The documentation for each command can be a final private static string even to be honest
+ - Not a huge fan of the super execute... This check might be more appropriate as some decorator if you ask me
+    - Or even a utility, since by having this implemented partially implies that you can run it as is
+ - Filesystem stores commands???? That is horrible breakdown (or at the very least naming) (-1)
+ - Filesystem is nice, perhaps having some way to traverse back up the tree can be extremely helpful for you ;)
+    - ~parent instance in FileObj *cough* *cough*
+
+==== Javadoc ==== [up to -3]
+
+Several steps can be lost for these kinds of issues:
+
+- [ ]  Missing Javadoc on methods -1 for infrequent problems, up to -3 for frequent
+- [ ]  Missing Javadoc on class -1
+- [ ]  No Javadoc on instance vars -1
+- [ ]  Missing use @param and @return tags -1
+- [ ]  Unclear English: bad grammar, bad spelling up to -2
+
+TA COMMENTS: 
+
+==== Testing ==== [up to -6] 
+Several steps can be lost for these kinds of issues:
+
+- [ ]  No test cases exist for public methods -6
+- [ ]  Some testing done for all classes and methods, but not thoroughly up to -3
+- [ ]  Test quality is inadequate or tests uninformative -1 to -2
+        e.g., testing using lots of print statements instead of assert calls
+- [ ]  Code not written to be testable -2
+
+TA COMMENTS: 
+
+==== Correctness ==== [up to -6]
+
+- [ ]  Code doesn't compile without modification (if the fix is simple) -1
+- [ ]  Code that is complete (from the SB) doesn't work completely: up to -2
+- [ ]  Code crashes: -3
+- [ ]  Each missing/incomplete feature -1
+
+TA COMMENTS:
+ - Very simple and "empty" compared to most, but nothing wrong with that... less is more!
+ - Perfect score! woot! (Here is your reward https://www.youtube.com/watch?v=b6pCytV_7iY)
+
+The test cases for this assignment can be found in the following link. 
+Please review the test cases that did not pass for your project: 
+https://docs.google.com/spreadsheets/d/1jrYYSI6QinstxGE-DdwsjdzOWKwwmajXsscGW6dzFgU/edit?usp=sharing
+
+Note: Some test cases were tweaked for your benefit to not penalize you based on previous failed test cases. 

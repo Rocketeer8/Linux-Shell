@@ -1,0 +1,53 @@
+package commands;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import filesystem.FileSystem;
+import output.ErrorOutput;
+
+public class LoadJShell extends Command {
+
+  private static final long serialVersionUID = 1L;
+
+  public LoadJShell(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+  }
+
+  @Override
+  public void execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+
+    if (FileSystem.getInstance().getCommandHistory().size() > 1) {
+      ErrorOutput.println("Cannot load JShell onto a modified session. ");
+      return;
+    }
+
+    try {
+      FileInputStream fileIn;
+      ObjectInputStream objectIn;
+      fileIn = new FileInputStream("savedJShells/" + shellInput[0]);
+      objectIn = new ObjectInputStream(fileIn);
+
+      FileSystem.getInstance()
+          .setFileSystem((FileSystem) objectIn.readObject());
+      objectIn.close();
+      fileIn.close();
+
+    } catch (IOException e) {
+      System.out.println(shellInput[0] + " does not exist.");
+      return;
+    } catch (ClassNotFoundException c) {
+      System.out.println("Class not found");
+      return;
+    }
+
+  }
+
+}

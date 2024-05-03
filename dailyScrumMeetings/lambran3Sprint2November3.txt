@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - implemented the Path traversal to change directories
+    - updated CRC cards 
+
+What do I plan to work in the next three days?
+    - finish the MakeDirectory command by updating the execute method
+    - finish the CRC cards to reflect our final design
+
+Am I blocked on anything?
+    - need to finalize our design for calling commands

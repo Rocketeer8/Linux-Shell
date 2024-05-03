@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - discussed with team on implementation using Singleton Design Pattern
+    - changed Directory objects to store content using Hashmaps instead of ArrayList after consulting with the team
+    - began designing and implementing the Path class
+    - updated MakeDirectory command to only allow for two inputs
+
+What do I plan to work in the next three days?
+    - continue to implement the Path class
+    - continue to update CRC Cards to match our design
+
+Am I blocked on anything?
+    - need to create a design for Path class to traverse through parent directories

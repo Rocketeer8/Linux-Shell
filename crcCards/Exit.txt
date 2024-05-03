@@ -1,0 +1,9 @@
+Class name: Exit
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Exit shell
+
+Collaborators:
+*FileSystem

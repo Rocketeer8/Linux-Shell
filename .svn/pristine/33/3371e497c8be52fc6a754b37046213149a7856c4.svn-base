@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Implemented ListFile, and PathTraversal
+    - Started to Implement Echo and EchoOverwrite.
+    - Discussed the implementation design for parsing and implementation of command classes with teammates
+
+What do I plan to work in the next three days?
+    - Refine and finish PathTRaversal, ListFile.
+    - Implement Echo and ChangeDirectory class
+    - Talk more about implementation design.
+
+Am I blocked on anything?
+    - Not sure if path class should use singleton or just static

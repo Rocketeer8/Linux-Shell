@@ -1,0 +1,9 @@
+What did I work on in the last three days?
+    - Work on ls recursion and redirection. 
+
+What do I plan to work in the next three days?
+    - change ls to iterator design
+    - do test cases
+
+Am I blocked on anything?
+    - None

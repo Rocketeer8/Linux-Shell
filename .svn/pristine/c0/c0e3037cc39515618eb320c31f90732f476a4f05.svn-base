@@ -1,0 +1,174 @@
+package commands;
+
+import java.util.Arrays;
+
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import handling.InputParser;
+import handling.StandardError;
+import output.Output;
+
+public class OutputCommand extends Command{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	protected String redirectSymbol = "";
+	protected String outfilePath = "";
+	protected boolean gotOutFile = false;
+	protected File outFile = null;
+
+	public OutputCommand(int[] validArgumentCounts) {
+		// for command class to check argument count(used only once)
+		super(validArgumentCounts);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void execute(String[] arguments) {
+		super.execute(arguments);
+		
+		// create outFile and clear content if symbol is ">"
+		if (hasRedirect()) {
+			outFile = getOutfile();
+			  // create outFile if it's not yet created
+			  if (outFile == null) {
+		    	  // not valid file name
+		          return;
+		        } 
+		      if (redirectSymbol.equals(">")) {
+		          // clear outfile content 
+		    	  outFile.clearTextContent();
+		      }
+		}
+	}
+	
+	  public String[] getArguments(String[] shellInput) {
+		  String stringArg = getArgumentsString(shellInput);
+		  if (stringArg == null || stringArg.equals("")) {
+			  return new String[0];
+		  }
+		  return stringArg.trim().split("\\s+");
+	  }
+	  
+	  public String getArgumentsString(String[] shellInput) {
+		  // reset all value when calling a output command
+		  Initialize();
+		  
+		    // check for []
+		    if (shellInput.length == 0) {
+		      return null;
+		    } else if (shellInput[0].lastIndexOf(">>") != -1) {
+		    	// if redirection ">>" exist
+		    	int symbolInd = shellInput[0].lastIndexOf(">>");
+		    	
+		    	redirectSymbol = ">>";
+		    	outfilePath = shellInput[0].substring(symbolInd+2).trim();
+		    	// remove the redirection part and deal with it later
+		    	shellInput[0] = shellInput[0].substring(0, symbolInd);
+		    } else if (shellInput[0].lastIndexOf(">") != -1) {
+		    	// if redirection ">" exist
+		    	int symbolInd = shellInput[0].lastIndexOf(">");
+		    	
+		    	redirectSymbol = ">";
+		    	outfilePath = shellInput[0].substring(symbolInd+1).trim();
+		    	shellInput[0] = shellInput[0].substring(0, symbolInd);
+		    }
+		    // check for [""]
+
+		    if (shellInput.length == 1 && shellInput[0].equals("")) {
+		    	return "";
+		    }
+
+		    return shellInput[0].trim();
+	  }
+	  
+	  /**
+	   * If an append or overwrite operation is given, get the file from the 
+	   * given path to store the text in , if the file doesn't exist, 
+	   * create a new one.
+	   * 
+	   * @param path The path to the file to store text in.
+	   * @return Return the file to store text in.
+	   */
+	  private File getOutfile() {
+
+		    InputParser parser = FileSystem.getInstance().getParser();
+		    StandardError errorHandler = FileSystem.
+		    		getInstance().getErrorHandler();
+
+		    // check for invalid path
+		    Directory parentDir = parser.
+		    		parsePathToSecondLastDirectory(outfilePath);
+		    if (parentDir == null) {
+		      return null;
+		    }
+		    String fileName = parser.parsePathToName(outfilePath);
+
+		    // Outfile already exist
+		    if (parentDir.getSubFile(fileName) instanceof File) {
+		      return (File) parentDir.getSubFile(fileName);
+		    }
+
+		    // check for bad name or exist directory of the same name
+		    if (!(errorHandler.isValidFileName(fileName))
+		        || errorHandler.isDuplicateName(parentDir, fileName)) {
+		      return null;
+		    }
+
+		    // create the file as it doesn't exist.
+		    File outFile = new File(fileName);
+		    parentDir.addToDir(outFile);
+		    outFile.setParentDirectory(parentDir);
+		    
+		    gotOutFile = true;
+		    return outFile;
+		  }
+	  
+	  protected boolean hasRedirect() {
+		  return (redirectSymbol.equals(">") || redirectSymbol.equals(">>"));
+	  }
+	  
+
+	  /**
+	   * Determine to whether print output or store output in file
+	   * @param output
+	   */
+	  protected void handleOutput(String output) {
+		  if (hasRedirect()) {
+			  redirect(output + "\n");
+		  } else {
+			  Output.println(output);
+		  }
+	  }
+	  
+	  /**
+	   * Determine to whether print output or store output in file
+	   *  with no new line
+	   * @param output
+	   */
+	  protected void handleNoNewlineOutput(String output) {
+		  if (hasRedirect()) {
+			  redirect(output);
+		  } else {
+			  Output.print(output);
+		  }
+	  }
+	  
+	  private void redirect(String output) {
+		  if (!hasRedirect()) {
+			  return;
+		  }	 
+		  outFile.addToTextContent(output);
+	  }
+	  
+	  private void Initialize() {
+			redirectSymbol = "";
+			outfilePath = "";
+			gotOutFile = false;
+			outFile = null;
+	  }
+	  
+}

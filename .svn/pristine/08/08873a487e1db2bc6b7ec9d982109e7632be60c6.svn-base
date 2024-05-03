@@ -1,0 +1,12 @@
+As a user, I can save any shell output to a file.						1 Week
+As a user, I can remove any directory from the file system.					1 Hour
+As a user, I can make one or more directories in the file system.				1 Hour
+As a user, I can list all the subdirectories of a given directory.				1 Day
+As a user, I can move a file or directory to a given directory.					3 Hours
+As a user, I can copy a file or directory to a given directory.					2 Hours
+As a user, I can retrieve a file from a url and add it to the file system.			1 Day
+As a user, I can print the documentation for a command.						1 Hour
+As a user, I can save the current state of the JShell to my computer's file system.		1 Week
+As a user, I can load the state of a JShell from a saved file in my computer's file system.	1 Week
+As a user, I can search for a file or directory by name in directories.				1 Hour
+As a user, I can display the entire file system as a tree.					3 Hours

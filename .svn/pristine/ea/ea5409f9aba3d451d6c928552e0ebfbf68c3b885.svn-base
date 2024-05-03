@@ -1,0 +1,36 @@
+Sprint 1 Backlog.  
+November 23th (12:01 am) to November 29th (11:59 pm)
+
+
+User Stories from Product Backlog that we will address in this sprint:
+a) As a user, I can save any shell output to a file.
+b) As a user, I can move a file or directory to a given directory.	
+c) As a user, I can retrieve a file from a url and add it to the file system.
+d) As a user, I can print the documentation for a command.		
+e) As a user, I can search for a file or directory by name in directories.
+
+Specific tasks to be accomplished:
+a-1.(Command) Update commands to use the new redirection mechanism.
+b-1.(MoveDirectory) Fix a small bug in MoveDirectory.
+c-1.(RetrieveUrl) Fix a small bug in RetrieveURL.
+d-1.(Manual) Make all the command documentation public static final.
+d-2.(Manual) Add command documentation for the new commands introduced in A2B.
+e-1.(Search) Use the iterator to search through the file system.
+f-1.(Exceptions) Implement exception classes for different errors.
+g-1.(Testing) Implement test cases for every non-trivial method.
+h-1.(FileSystem) Move commands from the file system to the JShell.
+i-1.(CRCCards) Update the CRC cards for A2B.
+
+These tasks are assigned as follows:
+
+User: Marcus Pasquariello
+Tasks: d-1, d-2, h-1
+
+User: Brandon Lam
+Tasks: b-1, g-1, i-1
+
+User: Aliel Jacob Roxas
+Tasks: c-1, e-1
+
+User: Danny Liu
+Tasks: a-1, f-1

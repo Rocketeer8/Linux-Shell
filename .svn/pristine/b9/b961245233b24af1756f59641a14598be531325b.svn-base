@@ -1,0 +1,173 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import commands.PushDirectory;
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class PushDirectoryTest {
+
+  FileSystem fileSystem;
+  PushDirectory pushDir;
+
+  @Before
+  public void setUp() {
+    fileSystem = FileSystem.getInstance();
+    pushDir = new PushDirectory(new int[] {1});
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    Field field =
+        (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  @Test
+  public void testExecuteWithRootAsWorkingDir() {
+    Directory oldCurrentDir = fileSystem.getWorkingDirectory();
+
+    // Creates expectedDir into root directory
+    Directory expectedDir = new Directory("expectedDir");
+    expectedDir.setParentDirectory(fileSystem.getRootDirectory());
+    fileSystem.getRootDirectory().addToDir(expectedDir);
+
+    // Creates argument for execute
+    String[] args = {"expectedDir"};
+    assertEquals(expectedDir, pushDir.execute(args));
+    assertEquals(oldCurrentDir, fileSystem.getDirectoryStack().pop());
+  }
+
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+    Directory oldCurrentDir = fileSystem.getWorkingDirectory();
+
+    // Checks case with no arg
+    assertNull(pushDir.execute(new String[]{}));
+
+    // Checks case with multiple args, arg types do not matter
+    assertNull(pushDir.execute(new String[]{"1 ?"}));
+
+    // Checks that the current directory is unchanged
+    assertEquals(oldCurrentDir, fileSystem.getWorkingDirectory());
+  }
+
+  @Test
+  public void testExecuteWithNonExistentDirectory() {
+    Directory rootDir = fileSystem.getRootDirectory();
+
+    // Checks while no other files or directories exist
+    assertNull(pushDir.execute(new String[]{"notInSystem"}));
+    // Checks the working directory did not change
+    assertEquals(rootDir, fileSystem.getWorkingDirectory());
+
+    // Populating FileSystem with directory
+    Directory tempAddedDir = new Directory("Dir1");
+    tempAddedDir.setParentDirectory(rootDir);
+    rootDir.addToDir(tempAddedDir);
+
+    // Changes the current working directory
+    fileSystem.setWorkingDirectory(tempAddedDir);
+
+
+    // Checks while other files or directories exist
+    assertNull(pushDir.execute(new String[]{"notInSystem"}));
+    // Checks the working directory did not change
+    assertEquals(tempAddedDir, fileSystem.getWorkingDirectory());
+  }
+
+  @Test
+  public void testExecuteWithAExistingFile() {
+
+    // Setting a working directory
+    Directory rootDir = fileSystem.getRootDirectory();
+
+    // Populating FileSystem with file
+    File  file = new File("fileObj");
+    file.setParentDirectory(rootDir);
+    rootDir.addToDir(file);
+
+    // Checks while Directory fileObj does not exist
+    assertNull(pushDir.execute(new String[]{"fileObj"}));
+    // Checks that the current directory is unchanged
+    assertEquals(rootDir, fileSystem.getWorkingDirectory());
+  }
+
+  @Test
+  public void testExecuteWhenFileNameAndDirNameAreEqual() {
+
+    // Setting a working directory
+    Directory rootDir = fileSystem.getRootDirectory();
+    Directory currentWorkingDir = new Directory("curDir");
+    currentWorkingDir.setParentDirectory(rootDir);
+    rootDir.addToDir(rootDir);
+    fileSystem.setWorkingDirectory(currentWorkingDir);
+
+    // Populating FileSystem with file
+    File  file = new File("fileObj");
+    file.setParentDirectory(currentWorkingDir);
+    currentWorkingDir.addToDir(file);
+
+    // Checks while Directory fileObj does not exist
+    assertNull(pushDir.execute(new String[]{"fileObj"}));
+    // Checks that the current directory is unchanged
+    assertEquals(currentWorkingDir, fileSystem.getWorkingDirectory());
+
+    // Creating Directory with same name as file
+    Directory dir = new Directory("fileObj");
+    dir.setParentDirectory(rootDir);
+    rootDir.addToDir(dir);
+
+    // Checks while Directory fileObj exists
+    assertEquals(dir, pushDir.execute(new String[]{"/fileObj"}));
+    assertEquals(dir, fileSystem.getWorkingDirectory());
+  }
+
+  @Test
+  public void testExecuteWithRelativePath() {
+
+    // Creates the current directory so that it is not the root
+    Directory oldCurrentDir = new Directory("oldDir");
+    oldCurrentDir.setParentDirectory(fileSystem.getRootDirectory());
+    fileSystem.getRootDirectory().addToDir(oldCurrentDir);
+    fileSystem.setWorkingDirectory(oldCurrentDir);
+
+    // Creates expectedDir into root directory
+    Directory expectedDir = new Directory("expectedDir");
+    expectedDir.setParentDirectory(fileSystem.getWorkingDirectory());
+    fileSystem.getWorkingDirectory().addToDir(expectedDir);
+
+    // Creates argument for execute
+    String[] args = {"expectedDir"};
+    assertEquals(expectedDir, pushDir.execute(args));
+    assertEquals(oldCurrentDir, fileSystem.getDirectoryStack().pop());
+  }
+
+  @Test
+  public void testExecuteWithAbsolutePath() {
+
+    // Creates the current directory so that it is not the root
+    Directory oldCurrentDir = new Directory("oldDir");
+    oldCurrentDir.setParentDirectory(fileSystem.getRootDirectory());
+    fileSystem.getRootDirectory().addToDir(oldCurrentDir);
+    fileSystem.setWorkingDirectory(oldCurrentDir);
+
+    // Creates expectedDir into root directory
+    Directory expectedDir = new Directory("expectedDir");
+    expectedDir.setParentDirectory(fileSystem.getRootDirectory());
+    fileSystem.getRootDirectory().addToDir(expectedDir);
+
+    // Creates argument for execute
+    String[] args = {"/expectedDir"};
+    assertEquals(expectedDir, pushDir.execute(args));
+    assertEquals(oldCurrentDir, fileSystem.getDirectoryStack().pop());
+  }
+}

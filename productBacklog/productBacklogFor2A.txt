@@ -1,0 +1,12 @@
+As a user, I can close the shell      							1 hour
+As a user, I can create at most 2 directories in any directory         			1 day
+As a user, I can change my current directory						2 hours
+As a user, I can display the content of any directory/directories			3 hours
+As a user, I can display the path of a file	or directory				1 hour
+As a user, I can keep track of my recent directories					1 day
+As a user, I can keep track of my recent command(s)       				1 day
+As a user, I can display the contents of one or more files				1 day
+As a user, I can create a file								2 hours
+As a user, I can edit a file								1 day
+As a user, I can determine what each commands does       				2 hours
+As a user, I can execute a command							1 day

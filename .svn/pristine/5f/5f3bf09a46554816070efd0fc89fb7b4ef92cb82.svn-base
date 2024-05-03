@@ -1,0 +1,197 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Scanner;
+
+/**
+ * The RetrieveUrl Class is a Command that retrieves a file from a URL and saves
+ * it in the working directory of the file system.
+ *
+ * @author Aliel
+ */
+public class RetrieveUrl extends Command {
+
+  /**
+   * Constructs a new RetrieveURL with its valid argument counts and
+   * documentation.
+   *
+   * @param validArgumentCounts Stores all the valid argument counts for
+   *        RetrieveURL
+   */
+  public RetrieveUrl(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "curl URL"
+        + "\n\tRetrieve the file at that URL and add it to the current working"
+        + "\n\tdirectory.";
+  }
+
+  /**
+   * If the size of arguments is in validArgumentCounts, then this retrieves a
+   * file from a given URL, saves it as a File in the file system, and returns
+   * the file. Otherwise, returns null.
+   *
+   * @param shellInput An array of arguments for the command.
+   * @return The file retrieved at a given URL, or null.
+   */
+  public File execute(String[] shellInput) {
+    
+
+    // Splits the arguments of shellInput into an array of arguments
+    String[] arguments = super.getArguments(shellInput);
+
+    // Checks if the arguments is a valid argument count
+    super.execute(arguments);
+
+    if (!isCountValid) {
+      return null;
+    }
+    
+    FileSystem fileSystem = FileSystem.getInstance();
+    Directory workingDirectory = fileSystem.getWorkingDirectory();
+    
+    File urlFile = this.getUrlFile(arguments[0]);
+
+    if (urlFile == null) {
+      return null;
+    }
+
+    
+    if (workingDirectory.getSubFile(urlFile.getName()) != null) {
+      System.out.println(urlFile.getName() + " already in working directory");
+      return null;
+    }
+
+    workingDirectory.addToDir(urlFile);
+
+    return urlFile;
+  }
+
+  /**
+   * Returns a File of the file in url. Returns null if No file exists in url.
+   *
+   * @param urlName The name of the URL to be checked
+   * @return A File of the file in url, or null if no such file exists in url.
+   */
+  private File getUrlFile(String urlName) {
+    URL url = this.parseUrlToUrl(urlName);
+
+    if (url == null) {
+      return null;
+    }
+
+    String fileName = this.parseUrlFileToString(url);
+
+    if (fileName == null) {
+      return null;
+    }
+
+    String fileContent = this.getContents(url);
+
+    if (fileContent == null) {
+      return null;
+    }
+
+    File urlFile = new File(fileName);
+    urlFile.addToTextContent(fileContent);
+    return urlFile;
+  }
+
+  /**
+   * Returns a URL object of url if url can be a URL. Returns null otherwise.
+   *
+   * @param url The url as a string.
+   * @return URL object of url if url can be a URL, or null
+   */
+  private URL parseUrlToUrl(String url) {
+    try {
+      return new URL(url);
+    } catch (IOException e) {
+      System.out.println("Invalid URL");
+      return null;
+    }
+  }
+
+  /**
+   * Return the name of the file in url.
+   *
+   * @param url The URL where the file is.
+   * @return The name of the file in url, or null if url is null.
+   */
+  private String parseUrlFileToString(URL url) {
+    if (url == null) {
+      return null;
+    } else if (url.getFile().isEmpty()
+        || url.getFile().split("/").length == 0) {
+      System.out.println("File not found");
+      return null;
+    }
+
+    String[] splitFileName = url.getFile().split("/");
+    return splitFileName[splitFileName.length - 1]
+        .replaceAll("[/.!@#$%^&*(){}~|<>?\"]", "");
+  }
+
+  /**
+   * Returns the contents of a file in url as a String.
+   *
+   * @param url The URL to get the contents from.
+   * @return The contents of a file in url as a String, or null if url is null
+   *         or contents of url are null.
+   */
+  private String getContents(URL url) {
+    if (url == null) {
+      return null;
+    }
+
+    StringBuilder content = new StringBuilder();
+    Scanner urlScan;
+
+    try {
+      urlScan = new Scanner(url.openStream());
+    } catch (IOException e) {
+      System.out.println("No contents found in URL file");
+      return null;
+    }
+
+    while (urlScan.hasNext()) {
+      content.append(urlScan.nextLine()).append("\n");
+    }
+
+    urlScan.close();
+    return content.toString();
+  }
+}

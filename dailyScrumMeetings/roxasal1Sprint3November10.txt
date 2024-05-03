@@ -1,0 +1,13 @@
+What did I work on in the last three days?
+    - Finished the following classes:
+      - EchoAppend, EchoOverwrite, History, PushDirectory
+      - PrintWorkingDirectory, PopDirectory
+    - Added javadocs to the following classes:
+      - EchoAppend, EchoOverwrite, History, PushDirectory
+      - PrintWorkingDirectory, PopDirectory, Exit
+
+What do I plan to work in the next three days?
+    - n/a
+		
+Am I blocked on anything?
+    - n/a

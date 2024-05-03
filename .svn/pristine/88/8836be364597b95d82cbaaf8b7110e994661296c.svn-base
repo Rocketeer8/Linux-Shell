@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Implemented the File class, and set it as parent of Dir.
+    - Started to Implement Echo and EchoOverwrite.
+    - Discussed the implementation design for parsing and executing command with teammates
+
+What do I plan to work in the next three days?
+    - Refine and finish File and Echo class
+    - Talk more about implementation design.
+
+Am I blocked on anything?
+    - Still havn't finalize implementation design, which affect the actual implementation of my classes.
+    - Not sure if inheritance should be in Echo command

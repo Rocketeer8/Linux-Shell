@@ -1,0 +1,41 @@
+Sprint 1 Backlog.  
+October 21st (12:01 am) to October 27th (11:59 pm)
+
+
+User Stories from Product Backlog that we will address in this sprint:
+a) As a user, I can execute a command
+b) As a user, I can create at most 2 directories in any directory
+c) As a user, I can close the shell
+d) As a user, I can create a file
+e) As a user, I can edit a file
+
+Specific tasks to be accomplished:
+a-1. (JShell) Write code to continuously prompt the user for input
+a-2. (Command) Implement the Abstract Command class and the corresponding abstract methods
+a-3. (StandardError) Begin to create the StandardError (error handling) class
+a-4. (JShell) Give the user an error message if the input is invalid
+a-5. (StandardOutput) Begin the StandardOutput class for being responsible for outputting to the shell
+a-6. Update CRC cards to match new design
+b-1. (Directory) Implement the Directory class to instantiate Directory objects
+b-2. (JShell) Create the root directory when the shell is initialized
+b-3. (MakeDirectory) Begin to implement the MakeDirectory class to create MakeDirectory command 
+c-1. (Exit) Exit the program when the user inputs "exit" (Implement the Exit class)
+d-1. (File) Implement the File class to instantiate file objects
+d-2. (EchoAppend) Implement the EchoAppend class for creating files
+e-1. (EchoAppend) Add a method for appending to a file in the echo append class
+e-2. (EchoOverwrite) Implement the EchoOverwrite class for overwriting files
+
+
+These tasks are assigned as follows:
+
+User: Marcus Pasquariello
+Tasks: a-1, a-2, a-3, a-4 
+
+User: Brandon Lam
+Tasks: b-1, b-2, b-3, a-6
+
+User: Aliel Jacob Roxas
+Tasks: d-2, e-1, c-1
+
+User: Danny Liu
+Tasks: a-5, d-1, e-2

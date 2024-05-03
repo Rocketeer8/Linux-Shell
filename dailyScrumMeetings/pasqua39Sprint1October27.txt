@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+	-Completed a large portion of the crccards to incorporate our new design
+	-Implemented some error checks in the ErrorHandling class
+
+What do I plan to work in the next three days?
+	-Make progress on the command parsing and error handling mechanism
+		-Complete the StandardError class to check every type of input for errors
+		-Implement a parsing class to convert an input into the appropriate type 		 for execution
+
+Am I blocked on anything?
+   	-Need a Shell class to keep track of working directory, root directory, and valid 	 commands 

@@ -1,0 +1,93 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.FileSystem;
+import handling.InputParser;
+import output.Output;
+
+/**
+ * The Manual class is responsible for displaying the documentation of a
+ * command.
+ * 
+ * @author Marcus
+ *
+ */
+public class Manual extends Command {
+
+  /**
+   * Creates a new Manual object with the commands valid arguments counts and
+   * Manuals specific documentation.
+   * 
+   * @param validArgumentCounts The array of valid argument counts
+   */
+  public Manual(int[] validArgumentCounts) {
+    
+    super(validArgumentCounts);
+    this.documentation =
+        "man CMD [CMD2...]" + "\n\tPrint documentation for CMD(s)";
+    
+  }
+
+
+  /**
+   * If the input has at least one argument and the input consists of only valid
+   * commands, print the documentation for each command.
+   * 
+   * @param shellInput An array of arguments for the command.
+   * 
+   */
+  @Override
+  public void execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+    InputParser parser = FileSystem.getInstance().getParser();
+
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+
+    Command command = null;
+
+    for (String commandName : arguments) {
+      command = parser.parseCommandArgumentToCommand(commandName);
+      if (command == null) {
+        return;
+      }
+      // Prints the documentation of each command
+      Output.println(command + "\n\n\n");
+
+    }
+
+  }
+
+}

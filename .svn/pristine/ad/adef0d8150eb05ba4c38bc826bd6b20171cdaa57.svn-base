@@ -1,0 +1,55 @@
+Sprint 1 Backlog.  
+November 16th (12:01 am) to November 22th (11:59 pm)
+
+
+User Stories from Product Backlog that we will address in this sprint:
+a) As a user, I can save any shell output to a file.						
+b) As a user, I can remove any directory from the file system.					
+c) As a user, I can make one or more directories in the file system.				
+d) As a user, I can list all the subdirectories of a given directory.				
+e) As a user, I can move a file or directory to a given directory.				
+f) As a user, I can copy a file or directory to a given directory.					
+g) As a user, I can retrieve a file from a url and add it to the file system.			
+h) As a user, I can print the documentation for a command.						
+i) As a user, I can save the current state of the JShell to my computer's file system.		
+j) As a user, I can load the state of a JShell from a saved file in my computer's file system.	
+k) As a user, I can search for a file or directory by name in directories.				
+l) As a user, I can display the entire file system as a tree.					
+
+
+Specific tasks to be accomplished:
+a-1.(Redirection) Think of ways to change the current design to incorporate redirection for any command with output.
+b-1.(RemoveDirectory) Implement the RemoveDirectory class.
+b-2.(RemoveDirectory) Complete the execute method for removing a directory from the file system.
+c-1.(FileSystem) Change valid argument count for mkdir.
+d-1.(ListContent) Implement a recursive method in the ListContent class for recursively printing the content of directories.
+e-1.(MoveDirectory) Implement the MoveDirectory class.
+e-2.(MoveDirectory) Complete the execute method for moving a directory.
+f-1.(CopyDirectory) Implement the CopyDirectory class.
+f-2.(CopyDirectory) Complete the execute method for copying a directory.
+g-1.(RequestURL) Implement the RequestURL class.
+g-2.(RequestURL) Parse the given URL into a file.
+g-3.(StandardError) Implement a method in StandardError for checking if the URL is valid.
+h-1.(FileSystem) Change valid argument count for man.
+i-1.(SaveJShell) Implement the SaveJShell class with methods to serialize the file system.
+i-2.(FileSystem) Make the FileSystem class and all its instance variable classes serializable.
+i-3.(SaveJShell) Make a folder in the assignment repository for holding JShell saves.
+j-1.(LoadJShell) Implement the LoadJShell class with methods for deserializing the file system.
+k-1.(Search) Implement the Search class and its corresponding methods for searching through the file system.
+l-1.(Tree) Implement the Tree class.
+l-2.(Tree) Implement an iterator to aid in traversing through the file system.
+
+
+These tasks are assigned as follows:
+
+User: Marcus Pasquariello
+Tasks: c-1, h-1, i-1, i-2, i-3, j-1, l-1, l-2
+
+User: Brandon Lam
+Tasks: b-1, b-2, e-1, e-2, f-1, f-2
+
+User: Aliel Jacob Roxas
+Tasks: g-1, g-2, g-3, k-1
+
+User: Danny Liu
+Tasks: a-1, d-1

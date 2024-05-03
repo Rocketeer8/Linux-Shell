@@ -1,0 +1,211 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.Search;
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class SearchTest {
+
+  FileSystem fileSystem;
+  Search search;
+
+  @Before
+  public void setUp() {
+    fileSystem = FileSystem.getInstance();
+    search = new Search(new int[] {-6});
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    Field field =
+        (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+    StringBuilder argString = new StringBuilder();
+
+    // Checks case with 0 to 4 args, arg types do not matter
+    for (int i = 0; i < 5; i++) {
+      String[] args = {argString.toString()};
+      assertEquals("Inv Args", search.execute(args));
+      argString.append("argument ");
+    }
+  }
+
+  @Test
+  public void testExecuteWithMissingRequiredArguments() {
+
+    // Checks if -type is in the right location
+    String args = "-type missing_-type type d -name \"/\"";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+
+    // Checks if f or d is in the right location
+    args = " f missing_f_or_d d -type ! -name \"/\"";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+
+    // Checks if -name is in the right location
+    args = "missing_-name -name -type d name \"/\"";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+
+    // Checks if expression is in quotations and in the right location
+    args = "missing_quotation_marks -type d -name /";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+    args = "missing_first_quotation_mark -type d -name /\"";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+    args = "missing_last_quotation_mark -type d -name \"/";
+    assertEquals("Inv Args", search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithFileExpressionInRoot() {
+
+    // Created file in root
+    Directory root = fileSystem.getRootDirectory();
+    File testFile = new File("testFile");
+    testFile.setParentDirectory(root);
+    root.addToDir(testFile);
+
+    // Set up parameters for search
+    String expectedResult = "/testFile\n";
+    String args = "/ -type f -name \"testFile\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+
+    // Check it does not do so for directory
+    expectedResult = "testFile not found in /\n";
+    args = "/ -type d -name \"testFile\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithDirExpressionInRoot() {
+
+    // Created file in root
+    Directory root = fileSystem.getRootDirectory();
+    Directory testDir = new Directory("testDir");
+    testDir.setParentDirectory(root);
+    root.addToDir(testDir);
+
+    // Set up parameters for search
+    String expectedResult = "/testDir\n";
+    String args = "/ -type d -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+
+    // Check it does not do so for file
+    expectedResult = "testDir not found in /\n";
+    args = "/ -type f -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithFileExpressionAndMultipleDirectories() {
+
+    // Imitates making directories in file system
+    Directory root = fileSystem.getRootDirectory();
+    Directory dir1 = new Directory("dir1");
+    dir1.setParentDirectory(root);
+    root.addToDir(dir1);
+
+    // Adds files to root and dir1
+    File testFile1 = new File("testFile");
+    testFile1.setParentDirectory(root);
+    root.addToDir(testFile1);
+    File testFile2 = new File("testFile");
+    testFile2.setParentDirectory(dir1);
+    dir1.addToDir(testFile2);
+
+    // Set up parameters for search
+    String expectedResult = "/dir1/testFile\n/testFile\n/dir1/testFile\n";
+    String args = "/ dir1 -type f -name \"testFile\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+
+    // Check it does not do so for directory
+    expectedResult = "testFile not found in /\ntestFile not found in dir1\n";
+    args = "/ dir1 -type d -name \"testFile\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithDirectoryExpressionAndMultipleDirectories() {
+
+    // Imitates making directories in file system
+    Directory root = fileSystem.getRootDirectory();
+    Directory dir1 = new Directory("dir1");
+    dir1.setParentDirectory(root);
+    root.addToDir(dir1);
+
+    // Adds files to root and dir1
+    Directory testDir1 = new Directory("testDir");
+    testDir1.setParentDirectory(root);
+    root.addToDir(testDir1);
+    Directory testDir2 = new Directory("testDir");
+    testDir2.setParentDirectory(dir1);
+    dir1.addToDir(testDir2);
+
+    // Set up parameters for search
+    String expectedResult = "/dir1/testDir\n/testDir\n/dir1/testDir\n";
+    String args = "/ dir1 -type d -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+
+    // Check it does not do so for directory
+    expectedResult = "testDir not found in /\ntestDir not found in dir1\n";
+    args = "/ dir1 -type f -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithNonExistentDirectory() {
+
+    // Imitates making directories in file system
+    Directory root = fileSystem.getRootDirectory();
+    Directory dir1 = new Directory("dir1");
+    dir1.setParentDirectory(root);
+    root.addToDir(dir1);
+
+    // Adds files to root and dir1
+    Directory testDir1 = new Directory("testDir");
+    testDir1.setParentDirectory(root);
+    root.addToDir(testDir1);
+    Directory testDir2 = new Directory("testDir");
+    testDir2.setParentDirectory(dir1);
+    dir1.addToDir(testDir2);
+
+    // Set up parameters for search
+    String expectedResult = "/dir1/testDir\n/testDir\n/dir1/testDir\n";
+    String args = "/ dir1 -type d -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+
+    // Check that the method stops when it reaches fakeDir
+    expectedResult = "/dir1/testDir\n/testDir\nInvalid Path\n";
+    args = "/ fakeDir dir1 -type d -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[] {args}));
+  }
+
+  @Test
+  public void testExecuteWithNonExistentExpression() {
+
+    // Imitates making directories in file system
+    Directory root = fileSystem.getRootDirectory();
+    Directory dir1 = new Directory("dir1");
+    dir1.setParentDirectory(root);
+    root.addToDir(dir1);
+
+    // Check that testDir cannot be found using d
+    String expectedResult = "testDir not found in /\ntestDir not found in "
+        + "dir1\n";
+    String args = "/ dir1 -type d -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[]{args}));
+    // Check that testDir cannot be found using f
+    args = "/ dir1 -type f -name \"testDir\"";
+    assertEquals(expectedResult, search.execute(new String[]{args}));
+  }
+}

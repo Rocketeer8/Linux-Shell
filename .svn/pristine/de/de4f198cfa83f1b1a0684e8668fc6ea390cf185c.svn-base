@@ -1,0 +1,225 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package filesystem;
+
+import commands.ChangeDirectory;
+import commands.Command;
+import commands.Concatenate;
+import commands.Echo;
+import commands.Exit;
+import commands.History;
+import commands.ListContent;
+import commands.MakeDirectory;
+import commands.Manual;
+import commands.PopDirectory;
+import commands.PrintWorkingDirectory;
+import commands.PushDirectory;
+import handling.InputParser;
+import handling.PathHandler;
+import handling.StandardError;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+
+
+public class FileSystem {
+
+  private static FileSystem shellInstance;
+
+  /** The root directory of the file system. */
+  private Directory rootDirectory;
+  /** The working directory of the file system. */
+  private Directory workingDirectory;
+  /** The hash map mapping a command name to is corresponding command. */
+  private HashMap<String, Command> commands;
+  /** The file systems parser for parsing shell input. */
+  private InputParser parser;
+  /** The file systems error handler for checking if shell input is valid. */
+  private StandardError errorHandler;
+  /** The file systems path handler for traversing through the file system. */
+  private PathHandler pathHandler;
+  /** An array list of the file systems command history. */
+  private ArrayList<String> commandHistory;
+  /** A stack for keeping track of pushed directories. */
+  private Stack<Directory> directoryStack;
+  /** A boolean to keep close shell when needed. */
+  private boolean closeShell;
+
+  /**
+   * Creates a new file system and initializes each of its instance variables.
+   */
+  private FileSystem() {
+    this.rootDirectory = new Directory("/");
+    this.workingDirectory = rootDirectory;
+    this.parser = new InputParser();
+    this.errorHandler = new StandardError();
+    this.pathHandler = new PathHandler();
+    this.commands = new HashMap<String, Command>();
+    this.commandHistory = new ArrayList<String>();
+    this.closeShell = false;
+    directoryStack = new Stack<Directory>();
+    initializeCommands();
+  }
+
+
+
+  /**
+   * Returns the file system as a singleton to prevent having multiple file
+   * systems.
+   * 
+   * @return The singleton file system.
+   */
+  public static FileSystem getInstance() {
+    if (shellInstance == null) {
+      shellInstance = new FileSystem();
+    }
+    return shellInstance;
+  }
+
+  /**
+   * Adds each of the predetermined commands to the command hash map, and
+   * initialized them with their appropriate argument counts.
+   */
+  private void initializeCommands() {
+    commands.put("exit", new Exit(new int[] {0}));
+    commands.put("mkdir", new MakeDirectory(new int[] {2}));
+    commands.put("ls", new ListContent(new int[] {-1}));
+    commands.put("history", new History(new int[] {0, 1}));
+    commands.put("pushd", new PushDirectory(new int[] {1}));
+    commands.put("popd", new PopDirectory(new int[] {0}));
+    commands.put("pwd", new PrintWorkingDirectory(new int[] {0}));
+    commands.put("man", new Manual(new int[] {-2}));
+    commands.put("cat", new Concatenate(new int[] {-2}));
+    commands.put("cd", new ChangeDirectory(new int[] {1}));
+    commands.put("echo", new Echo(new int[] {1, 2, 3}));
+
+  }
+
+  /**
+   * Getter for the root directory.
+   * 
+   * @return The file systems root directory.
+   */
+  public Directory getRootDirectory() {
+    return rootDirectory;
+  }
+
+  /**
+   * Getter for the working directory.
+   * 
+   * @return The file systems working directory.
+   */
+  public Directory getWorkingDirectory() {
+    return workingDirectory;
+  }
+
+  /**
+   * Setter for the working directory.
+   * 
+   * @param workingDirectory The new working directory.
+   */
+  public void setWorkingDirectory(Directory workingDirectory) {
+    this.workingDirectory = workingDirectory;
+  }
+
+  /**
+   * Getter for the commands hash map.
+   * 
+   * @return The file systems commands hash map.
+   */
+  public HashMap<String, Command> getCommands() {
+    return commands;
+  }
+
+  /**
+   * Getter for the input parser.
+   * 
+   * @return The file systems input parser.
+   */
+  public InputParser getParser() {
+    return parser;
+  }
+
+  /**
+   * Getter for the error handler.
+   * 
+   * @return The file systems error handler.
+   */
+  public StandardError getErrorHandler() {
+    return errorHandler;
+  }
+
+  /**
+   * Getter for the path handler.
+   * 
+   * @return The file systems path handler.
+   */
+  public PathHandler getPathHandler() {
+    return pathHandler;
+  }
+
+  /**
+   * Getter for the command history.
+   * 
+   * @return The file systems command history.
+   */
+  public ArrayList<String> getCommandHistory() {
+    return commandHistory;
+  }
+
+  /**
+   * Getter for the directory stack.
+   * 
+   * @return The file systems directory stack.
+   */
+  public Stack<Directory> getDirectoryStack() {
+    return directoryStack;
+  }
+
+  /**
+   * Getter for closeShell. Check if termination is needed.
+   * 
+   * @return Boolean for whether or not to terminate the shell.
+   */
+  public boolean isCloseShell() {
+    return closeShell;
+  }
+
+  /**
+   * Setter for closeShell. Change to close the shell.
+   * 
+   * @param closeShell is a Boolean. Set closeShell to true to terminate.
+   */
+  public void setCloseShell(boolean closeShell) {
+    this.closeShell = closeShell;
+  }
+
+}

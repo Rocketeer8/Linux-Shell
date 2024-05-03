@@ -1,0 +1,11 @@
+Class name: PrintWorkingDirectory
+Parent class (if any): OutputCommand
+Subclasses (if any): None
+
+Responsibilities:
+*Prints the working directory
+
+Collaborators:
+*FileSystem
+*PathHandler
+*Directory

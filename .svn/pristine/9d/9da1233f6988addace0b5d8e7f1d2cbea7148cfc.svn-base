@@ -1,0 +1,9 @@
+Class name: File
+Parent class (if any): FileObj
+Subclasses (if any): None
+
+Responsibilities:
+*Stores text content
+
+Collaborators:
+

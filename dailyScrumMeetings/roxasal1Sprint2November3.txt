@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+    - Worked on PrintWorkingDirectory, EchoAppend and PushDirectory classes
+    - Finished History class
+
+What do I plan to work in the next three days?
+    - Finish EchoAppend class
+    - Small tweaks to PrintWorkingDirectory and PushDirectory classes
+    - Start on Sprint 3 tasks
+		
+Am I blocked on anything?
+    - Need method to print full path

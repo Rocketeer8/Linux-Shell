@@ -1,0 +1,22 @@
+Class name: Command
+Parent class (if any): None
+Subclasses (if any):
+*ChangeDirectory
+*Concatenate
+*Echo
+*Exit
+*History
+*ListContent
+*MakeDirectory
+*Manual
+*PopDirectory
+*PrintWorkingDirectory
+*PushDirectory
+
+Responsibilities:
+*Holds information for a given command(valid arguments, command name)
+*Executes a command
+
+
+Collaborators:
+*FileSystem

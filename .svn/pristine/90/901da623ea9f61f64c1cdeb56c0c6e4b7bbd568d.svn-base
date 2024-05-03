@@ -1,0 +1,132 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package filesystem;
+
+import java.io.Serializable;
+
+/**
+ * This is an abstract class to represent a general file. Which include both a
+ * file and a directory. This class is the parent of Directory and File class.
+ * 
+ * @author Danny
+ */
+public abstract class FileObj implements Serializable {
+
+
+  private static final long serialVersionUID = 1L;
+  /**
+   * Name is the file object's name, and parentDirectory is its parent
+   * directory.
+   */
+  protected String name;
+  protected Directory parentDirectory;
+
+  /**
+   * Constructor of FileObj. Once called, Initialize the name of the file object
+   * 
+   * @param name Name of the file object.
+   */
+  public FileObj(String name) {
+    /*
+     * "this.name" is instance variable inherit from File class, "name" is the
+     * local variable
+     */
+    this.name = name;
+  }
+
+  /**
+   * Setter for name.
+   * 
+   * @param name Name of the file object to be set on this file
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Getter for name.
+   * 
+   * @return Return the name of this file object
+   */
+  public String getName() {
+    return this.name;
+  }
+
+  /**
+   * Getter for parent directory.
+   * 
+   * @return Return the parent directory
+   */
+  public Directory getParentDirectory() {
+    return parentDirectory;
+  }
+
+  /**
+   * Setter for parent directory.
+   * 
+   * @param parentDirectory set the file object's parent directory to the given
+   *        directory
+   */
+  public void setParentDirectory(Directory parentDirectory) {
+    this.parentDirectory = parentDirectory;
+  }
+
+  /**
+   * Check if two file objects is equal.
+   * 
+   * @param fo The file object to be compared to,
+   * @return Return true if the fileObjs are equals, false if they are not
+   *         equals
+   */
+  public boolean equals(FileObj fo) {
+    /*
+     * Check if they have the same type, the same name, and the same parent
+     * directory
+     */
+    return (this.getClass().equals(fo.getClass())
+        && this.getName().equals(fo.getName())
+        && ((this.getParentDirectory() == null
+            && fo.getParentDirectory() == null)
+            || this.getParentDirectory().equals(fo.getParentDirectory())));
+
+  }
+
+  public int getDepth() {
+    if (name.equals("/")) {
+      return 0;
+    } else {
+      return 1 + parentDirectory.getDepth();
+    }
+  }
+
+
+
+}

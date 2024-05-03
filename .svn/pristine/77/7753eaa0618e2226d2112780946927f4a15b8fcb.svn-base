@@ -1,0 +1,9 @@
+Class name: EchoAppend
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Append to the contents of an existing file
+
+Collaborators:
+*File

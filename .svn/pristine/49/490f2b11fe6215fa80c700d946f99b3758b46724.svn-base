@@ -1,0 +1,56 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import commands.Echo;
+import filesystem.File;
+import filesystem.FileSystem;
+
+public class EchoTest {
+	
+	Echo echoObj;
+	FileSystem fs;
+	
+	@Before
+	public void setUp() throws Exception {
+		echoObj = new Echo(new int[] {1, 2, 3});
+		fs = FileSystem.getInstance();
+	}
+	
+  @After
+  public void tearDown() throws Exception {
+	 // reset FileSystem instance to empty after each test
+    Field field = (fs.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null); //setting the shellInstance parameter to null
+  }
+
+	@Test
+	public void ExecuteTestWithString() {
+		// test echo String, string is surround by double quotes
+		String output = echoObj.execute(new String[]{"\"Hello World!\""});
+		assertEquals(output, "Hello World!");
+	}
+	
+	@Test
+	public void ExecuteTestWithInvalidString() {
+		// test echo String with invalid symbol 
+		String output = echoObj.execute(new String[]{"\"Hel\"lo Wo@rld!\""});
+		assertEquals(output, null);
+	}
+	
+	@Test
+	public void ExecuteTestWithRedirection() {
+		// test echo String with invalid symbol 
+		echoObj.execute(new String[]{"\"Hello World!\" > fileA"});
+		File MadeFile = echoObj.getFile();
+		File expcetedFile = (File) fs.getRootDirectory().getSubFile("fileA");
+		assertEquals(MadeFile, expcetedFile);
+	}
+}

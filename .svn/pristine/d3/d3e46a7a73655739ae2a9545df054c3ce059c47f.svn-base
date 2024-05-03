@@ -1,0 +1,137 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package filesystem;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Stack;
+
+
+public class Directory extends FileObj implements Iterable<FileObj> {
+
+  private static final long serialVersionUID = 1L;
+  /**
+   * Using LinkedHashMap to store content of a directory for easy access.
+   * 
+   * @author Brandon
+   */
+  private LinkedHashMap<String, FileObj> contentInHashMap;
+
+  /**
+   * Constructor of Directory, set up the directory's name, parent, and link to
+   * its subfiles.
+   * 
+   * @param name Name of the directory.
+   */
+  public Directory(String name) {
+    // name here refer to local variable name
+    super(name);
+    this.contentInHashMap = new LinkedHashMap<String, FileObj>();
+  }
+
+  public FileObj getSubFile(String fileName) {
+    // if no match, return null
+    return this.contentInHashMap.get(fileName);
+  }
+
+  public void addToDir(FileObj file) {
+    this.contentInHashMap.put(file.getName(), file);
+  }
+
+  public void removeFromDir(FileObj file) {
+    this.contentInHashMap.remove(file.getName());
+  }
+
+  public ArrayList<FileObj> getSubFiles() {
+    return new ArrayList<FileObj>(contentInHashMap.values());
+  }
+
+  /**
+   * This method gets the list of names of its subfiles in the directory.
+   * 
+   * @return The list of names of this directory's subfiles.
+   */
+  public ArrayList<String> subFileNameList() {
+    // this method returns a list of names of subfiles in the directory
+    // updated this method to work with HashMaps instead of array list
+    ArrayList<String> contentList = new ArrayList<String>();
+    for (String i : contentInHashMap.keySet()) {
+      contentList.add(i);
+    }
+    return contentList;
+  }
+
+  @Override
+  public Iterator<FileObj> iterator() {
+    return new DirectoryIterator(this);
+  }
+
+  private class DirectoryIterator implements Iterator<FileObj> {
+
+    Stack<FileObj> stack;
+
+    public DirectoryIterator(Directory dir) {
+      stack = new Stack<FileObj>();
+      addSubFilesToStack(dir);
+    }
+
+    @Override
+    public boolean hasNext() {
+      return !stack.isEmpty();
+    }
+
+    @Override
+    public FileObj next() {
+      if (hasNext()) {
+        FileObj curFile = stack.pop();
+        if (curFile instanceof Directory) {
+            addSubFilesToStack((Directory)curFile);
+        } 
+        return curFile;
+      }
+      return null;
+    }
+    
+    private void addSubFilesToStack(Directory dir) {
+        if (dir != null) {
+            int size = dir.getSubFiles().size();
+            for (int i = size - 1; i >= 0; i--) {
+              stack.add(dir.getSubFiles().get(i));
+            }
+        }
+    }
+
+  }
+
+
+
+}

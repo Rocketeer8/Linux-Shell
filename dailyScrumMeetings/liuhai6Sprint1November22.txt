@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - Finishing up ls recursion
+    - Added redirection for output commands
+
+What do I plan to work in the next three days?
+    - Exceptions 
+    - Test cases
+
+Am I blocked on anything?
+    - Not sure how to test singleton

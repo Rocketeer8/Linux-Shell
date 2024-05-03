@@ -1,0 +1,122 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import commands.LoadJShell;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+
+/**
+ * This class is responsible for testing the LoadJShell class.
+ * 
+ * @author Marcus
+ */
+public class LoadJShellTest {
+
+  /** The FileSystem instance used for testing. */
+  private FileSystem fileSystem;
+  /** The LoadJShell instance to be tested. */
+  private LoadJShell loadJShell;
+
+  /**
+   * Initializes fileSystem and loadJShell.
+   * 
+   * @throws Exception An exception LoadJShell can throw.
+   */
+  @Before
+  public void setUp() throws Exception {
+    fileSystem = FileSystem.getInstance();
+    loadJShell = new LoadJShell(new int[] {1});
+  }
+
+  /**
+   * Sets the singleton fileSystem object to null, for the purpose of testing
+   * again.
+   * 
+   * @throws Exception An exception LoadJShell can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    Field field = (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  /**
+   * Tests execute with an invalid argument count.
+   */
+  @Test
+  public void executeTestInvalidArgumentCount() {
+    assertNull(loadJShell.execute(new String[] {}));
+    assertNull(loadJShell.execute(new String[] {"file1 file2"}));
+  }
+
+  /**
+   * Tests execute where a command has been inputed before LoadJShell.
+   */
+  @Test
+  public void executeTestNotFirstCommand() {
+    fileSystem.getCommandHistory().add("first command");
+    fileSystem.getCommandHistory().add("loadJShell testfile1");
+    // testfile1 is a valid file, so this returns null because a command was
+    // inputed before loadJShell
+    assertNull(loadJShell.execute(new String[] {"testfile1"}));
+  }
+
+  /**
+   * Tests execute with an invalid file (does not exist).
+   */
+  @Test
+  public void executeTestInvalidFile() {
+    assertNull(loadJShell.execute(new String[] {"invalidfile"}));
+  }
+
+  /**
+   * Tests execute with a valid file containing a file system with various
+   * directories, files, and command history.
+   */
+  @Test
+  public void executeTestValidFile() {
+    fileSystem = loadJShell.execute(new String[] {"testfile1"});
+    assertNotNull(fileSystem.getRootDirectory().getSubFile("dir1"));
+    assertEquals("mkdir dir1 dir2", fileSystem.getCommandHistory().get(0));
+    assertEquals("dir1", fileSystem.getWorkingDirectory().getName());
+  }
+
+}

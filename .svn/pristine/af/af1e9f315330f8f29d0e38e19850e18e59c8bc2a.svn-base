@@ -1,0 +1,62 @@
+package commands;
+
+import filesystem.FileObj;
+import filesystem.FileSystem;
+
+/**
+ * This class is responsible for displaying the contents of the entire file
+ * system on the JShell.
+ * 
+ * @author Marcus
+ *
+ */
+public class Tree extends OutputCommand {
+
+  /**
+   * Creates a new Tree object with the commands valid arguments counts and
+   * Tree's specific documentation.
+   * 
+   * @param validArgumentCounts The array of valid argument counts
+   */
+  public Tree(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "tree"
+        + "\n\tFrom the root directory (‘\\’) display the entire file system "
+        + "\n\tas a tree.";
+  }
+
+  /**
+   * Prints the contents of the entire file system on the JShell.
+   * 
+   * @param validArgumentCounts The array of valid argument counts
+   */
+  @Override
+  public String execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+    FileSystem fileSystem = FileSystem.getInstance();
+    StringBuilder output = new StringBuilder();
+
+    // Checks if the number of arguments is valid
+    super.execute(arguments);
+    if (!isCountValid || (hasRedirect() && outFile == null)) {
+      return null;
+    }
+
+    // Prints the root directory
+    output.append("/\n");
+
+    // Uses the root's iterator to print every file and directory in the file
+    // system, and with indentation according to depth from root
+    for (FileObj subFileObj : fileSystem.getRootDirectory()) {
+      for (int i = 0; i < subFileObj.getDepth(); i++) {
+        output.append("   ");
+      }
+      output.append(subFileObj.getName() + "\n");
+    }
+    handleOutput(output.toString());
+    return output.toString();
+
+  }
+
+}

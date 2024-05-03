@@ -1,0 +1,13 @@
+Class name: Manual
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Remove an existing directory and it's subfiles/subdirectories
+
+Collaborators:
+*FileSystem
+*InputParser
+*Directory
+*ErrorOutput
+

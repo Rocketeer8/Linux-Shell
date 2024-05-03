@@ -1,0 +1,15 @@
+Class name: Copy
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Copy a file or directory (and it's content) to a given path
+
+Collaborators:
+*FileSystem
+*InputParser
+*Directory
+*FileObj
+*File
+*ErrorOutput
+

@@ -1,0 +1,246 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.History;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * This class is responsible for for testing the History class.
+ *
+ * @author Aliel
+ */
+public class HistoryTest {
+
+  /** The FileSystem instance used for testing. */
+  FileSystem fileSystem;
+  /** The History instance to be tested. */
+  History history;
+  /** The commandHistory in the fileSystem used for testing. */
+  ArrayList<String> commandHistory;
+
+  /**
+   * Initializes fileSystem, history, and commandHistory.
+   */
+  @Before
+  public void setUp() {
+    fileSystem = FileSystem.getInstance();
+    history = new History(new int[] {0, 1});
+    commandHistory = fileSystem.getCommandHistory();
+  }
+
+  /**
+   * Sets the singleton fileSystem object to null, for the purpose of testing
+   * again.
+   *
+   * @throws Exception An exception History can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    Field field = (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  /**
+   * Tests execute with invalid arguments.
+   */
+  @Test
+  public void testExecuteWithInvalidArg() {
+
+    // Imitates user calling a command
+    // Checks case when arg is a letter
+    commandHistory.add("history a");
+    assertEquals("Inv Num", history.execute(new String[] {"a"}));
+
+    // Checks case when arg is a special character
+    commandHistory.add("history ?");
+    assertEquals("Inv Num", history.execute(new String[] {"?"}));
+
+    // Checks case when arg has a decimal point
+    commandHistory.add("history 1.0");
+    assertEquals("Inv Num", history.execute(new String[] {"1.5"}));
+
+    // Checks case when arg contains an integer, but is not an integer
+    commandHistory.add("history 1a");
+    assertEquals("Inv Num", history.execute(new String[] {"1a"}));
+
+    // Checks case when arg is a negative integer
+    commandHistory.add("history -1");
+    assertEquals("Inv Num", history.execute(new String[] {"-1"}));
+  }
+
+  /**
+   * Tests execute with invalid argument counts.
+   */
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+
+    // Imitates user calling a command
+    commandHistory.add("history 1 2");
+    assertEquals("Inv Args", history.execute(new String[] {"1 2"}));
+  }
+
+  /**
+   * Tests execute with an empty commandHistory and no arguments.
+   */
+  @Test
+  public void testExecuteWithEmptyListNoArgs() {
+
+    // Imitates user calling history
+    commandHistory.add("history");
+    assertEquals("1. history", history.execute(new String[] {}));
+  }
+
+  /**
+   * Tests execute with a non-empty commandHistory and no arguments.
+   */
+  @Test
+  public void testExecuteWithNonEmptyListNoArgs() {
+
+    // Builds the string that is the expected output for this case
+    StringBuilder expectedOutput = new StringBuilder();
+
+    // Imitates how commands by user are stored to commandHistory
+    for (int i = 0; i < 10; i++) {
+      commandHistory.add("Input " + (i + 1));
+      expectedOutput.append(i + 1).append(". ").append("Input ").append(i + 1)
+          .append("\n");
+    }
+
+    // Imitates user calling history
+    commandHistory.add("history");
+    expectedOutput.append("11. history");
+
+    assertEquals(expectedOutput.toString(), history.execute(new String[] {}));
+  }
+
+  /**
+   * Tests execute with an empty commandHistory and argument equal to "0".
+   */
+  @Test
+  public void testExecuteWithEmptyListWithArgEqualToZero() {
+
+    // Imitates user calling history 0
+    commandHistory.add("history 0");
+    assertEquals("", history.execute(new String[] {"0"}));
+  }
+
+  /**
+   * Tests execute with a non-empty commandHistory and argument equal to "0".
+   */
+  @Test
+  public void testExecuteWithNonEmptyListWithArgEqualToZero() {
+
+    // Imitates how commands by user are stored to commandHistory
+    for (int i = 0; i < 10; i++) {
+      commandHistory.add("Input " + (i + 1));
+    }
+
+    // Imitates user calling history 0
+    commandHistory.add("history 0");
+    assertEquals("", history.execute(new String[] {"0"}));
+  }
+
+  /**
+   * Tests execute with an empty commandHistory and argument equal to "1".
+   */
+  @Test
+  public void testExecuteWithEmptyListWithArgEqualToOne() {
+
+    // Imitates user calling history 1
+    commandHistory.add("history 1");
+    assertEquals("1. history 1", history.execute(new String[] {"1"}));
+  }
+
+  /**
+   * Tests execute with a non-empty commandHistory and argument equal to "0".
+   */
+  @Test
+  public void testExecuteWithNonEmptyListWithArgEqualToOne() {
+
+    // Imitates how commands by user are stored to commandHistory
+    for (int i = 0; i < 10; i++) {
+      commandHistory.add("Input " + (i + 1));
+    }
+
+    // Imitates user calling history 1
+    commandHistory.add("history 1");
+    assertEquals("11. history 1", history.execute(new String[] {"1"}));
+  }
+
+  /**
+   * Tests execute with an empty commandHistory and argument with a number
+   * greater than "1".
+   */
+  @Test
+  public void testExecuteWithEmptyListWithArgGreaterThanOne() {
+
+    // Imitates user calling history 20
+    commandHistory.add("history 20");
+    assertEquals("1. history 20", history.execute(new String[] {"20"}));
+  }
+
+  /**
+   * Tests execute with a non-empty commandHistory and argument with a number
+   * greater than "1".
+   */
+  @Test
+  public void testExecuteWithNonEmptyListWithArgGreaterThanOne() {
+
+    // Builds the string that is the expected output for this case
+    StringBuilder expectedOutput = new StringBuilder();
+
+    // Imitates how commands by user are stored to commandHistory
+    for (int i = 0; i < 10; i++) {
+      commandHistory.add("Input " + (i + 1));
+
+      // Only appends commands that are expected to appear
+      if (i > 4) {
+        expectedOutput.append(i + 1).append(". ").append("Input ").append(i + 1)
+            .append("\n");
+      }
+    }
+
+    // Imitates user calling history 6
+    commandHistory.add("history  6");
+    expectedOutput.append("11. history  6");
+    assertEquals(expectedOutput.toString(),
+        history.execute(new String[] {"6"}));
+  }
+}

@@ -1,0 +1,79 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.PrintWorkingDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+import handling.PathHandler;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class PrintWorkingDirectoryTest {
+
+  FileSystem fileSystem;
+  PrintWorkingDirectory pwd;
+
+  @Before
+  public void setUp()  {
+    fileSystem = FileSystem.getInstance();
+    pwd = new PrintWorkingDirectory(new int[] {0});
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    Field field =
+        (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+
+    // Checks case with one arg, arg type does not matter
+    assertEquals("Inv Args", pwd.execute(new String[] {"a"}));
+
+    // Checks case with multiple args, arg types do not matter
+    assertEquals("Inv Args", pwd.execute(new String[] {"1 ?"}));
+  }
+
+  @Test
+  public void testExecuteWithNoArgAndRootAsDirectory() {
+    PathHandler pathHandler = fileSystem.getPathHandler();
+
+    // Gets name of current working directory
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String workingDirPath = pathHandler.getPath(workingDir);
+    assertEquals(workingDirPath, pwd.execute(new String[] {}));
+  }
+
+  @Test
+  public void testExecuteWithNoArgAndNonRootAsDirectory() {
+    PathHandler pathHandler = fileSystem.getPathHandler();
+
+    // Sets expectedDir as new working directory
+    Directory expectedDir = new Directory("expectedDir");
+    expectedDir.setParentDirectory(fileSystem.getWorkingDirectory());
+    fileSystem.getWorkingDirectory().addToDir(expectedDir);
+    fileSystem.setWorkingDirectory(expectedDir);
+
+    // Gets name of current working directory
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String workingDirPath = pathHandler.getPath(workingDir);
+    assertEquals(workingDirPath, pwd.execute(new String[] {}));
+  }
+
+  @Test
+  public void testExecuteWithNoWorkingDirectory() {
+
+    /*
+     * Sets working directory to null, even if it
+     * may not be possible in an actual code.
+     */
+    fileSystem.setWorkingDirectory(null);
+    assertEquals("No Working Dir", pwd.execute(new String[] {}));
+  }
+}

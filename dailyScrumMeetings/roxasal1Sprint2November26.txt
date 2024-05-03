@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Worked on RetrieveUrl Class and its methods
+    - Finished Search Class and its methods
+    - Worked on Test cases for History
+
+What do I plan to work in the next three days?
+    - Finish RetrieveUrl and its methods
+    - Work on test cases for some of the classes in command
+		
+Am I blocked on anything?
+    - Do I treat a URL with a trailing "/" the same as one without?
+    - What should execute() return so that it can be tested?

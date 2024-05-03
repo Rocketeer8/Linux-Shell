@@ -1,0 +1,10 @@
+Class name: File
+Parent class (if any): FileObj
+Subclasses (if any): None
+
+Responsibilities:
+*Holds information in the form of a string
+*Checks whether a file exists
+
+Collaborators:
+

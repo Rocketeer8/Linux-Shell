@@ -1,0 +1,103 @@
+package test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import commands.PopDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class PopDirectoryTest {
+
+  FileSystem fileSystem;
+  PopDirectory popDir;
+
+  @Before
+  public void setUp() {
+    fileSystem = FileSystem.getInstance();
+    popDir = new PopDirectory(new int[] {0});
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    Field field =
+        (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+
+    // Checks case with one arg
+    assertNull(popDir.execute(new String[]{"a"}));
+
+    // Checks case with multiple args, arg types do not matter
+    assertNull(popDir.execute(new String[]{"1 ?"}));
+  }
+
+  @Test
+  public void testExecuteWithEmptyDirStack() {
+    Directory expectedWorkingDir = fileSystem.getWorkingDirectory();
+
+    assertTrue(fileSystem.getDirectoryStack().isEmpty());
+    assertNull(null, popDir.execute(new String[] {}));
+    assertEquals(expectedWorkingDir, fileSystem.getWorkingDirectory());
+  }
+
+  @Test
+  public void testExecuteWithNonEmptyDirStack() {
+
+    // Populate file system wit directories, and add them to directory stack
+    for (int i = 0; i < 5; i++) {
+      Directory tempDir = new Directory("Dir" + (i+1));
+      tempDir.setParentDirectory(fileSystem.getRootDirectory());
+      fileSystem.getRootDirectory().addToDir(tempDir);
+      fileSystem.getDirectoryStack().add(tempDir);
+    }
+
+    // Check that each one gets popped until the stack becomes empty
+    for (int i = 0; i < 5; i++) {
+      Directory expectedDir = fileSystem.getDirectoryStack().peek();
+      assertEquals(expectedDir, popDir.execute(new String[] {}));
+    }
+
+    // Checks that all the directory stacks are removed
+    assertTrue(fileSystem.getDirectoryStack().isEmpty());
+    assertNull(popDir.execute(new String[] {}));
+  }
+
+  @Test
+  public void testExecuteWithNonEmptyDirStackWithRemovedDirectories() {
+    Directory expectedDir = null;
+
+    // Populate file system wit directories, and add them to directory stack
+    for (int i = 0; i < 5; i++) {
+      Directory tempDir = new Directory("Dir" + (i+1));
+
+      /* Imitates how Dir2, 3, 4, and 5 were removed from file system
+       * by making it so that their parent is null and does not exist
+       * in the file system
+       */
+      if (i == 0) {
+        expectedDir = tempDir;
+        tempDir.setParentDirectory(fileSystem.getRootDirectory());
+        fileSystem.getRootDirectory().addToDir(tempDir);
+      }
+
+      fileSystem.getDirectoryStack().add(tempDir);
+    }
+
+    // Check to see that popDir skips over removed directories
+    assertEquals(expectedDir, popDir.execute(new String[] {}));
+
+    // Checks that all the directory stacks are removed
+    assertTrue(fileSystem.getDirectoryStack().isEmpty());
+    assertNull(popDir.execute(new String[] {}));
+  }
+}

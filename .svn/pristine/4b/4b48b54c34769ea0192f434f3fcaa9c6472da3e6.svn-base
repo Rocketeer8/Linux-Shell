@@ -1,0 +1,130 @@
+// **********************************************************
+// Assignment2:
+
+
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.FileSystem;
+import handling.InputParser;
+
+/**
+ * Echo has the responsible for create a file and/or editing a file. it can also
+ * to print out message on the mock shell.
+ * 
+ * @author Marcus, Danny
+ */
+public class Echo extends OutputCommand {
+
+  /**
+   * Setup valid argument counts for echo and its documentation.
+   * 
+   * @param validArgumentCounts Stores All the valid number of Argument counts
+   *        for echo
+   * 
+   */
+  public Echo(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "echo STRING [> OUTFILE]"
+        + "\n\tIf OUTFILE is not provided, print STRING on the shell. "
+        + "\n\tOtherwise, put STRING into file OUTFILE. This creates a new "
+        + "\n\tfile if OUTFILE does not exists and erases the old contents "
+        + "\n\tif OUTFILE already exists.\n\n" + "echo STRING >> OUTFILE"
+        + "\n\t Like the previous command, but appends instead of overwrites.";
+  }
+
+
+  /**
+   * This class either call output print out a text message, or either append to
+   * or overwrite the message to a text file given an operator and a name.
+   * 
+   * @param shellInput Arrays of command arguments
+   * @return  String that was echoed by the user
+   */
+  @Override
+  public String execute(String[] shellInput) {
+
+    String[] arguments = getArguments(shellInput);
+    super.execute(arguments);
+    /*
+     * check if it's correct argument counts and check if it's valid string and
+     * also check if it's a valid outFile name if it exists
+     */
+    if (!isCountValid || (hasRedirect() && outFile == null)) {
+      return null;
+    }
+
+    String text = null;
+    
+    if (arguments.length != 0) {
+      InputParser parser = FileSystem.getInstance().getParser();
+      text = parser.parseStringArgumentToString(arguments[0]);
+    }
+    if (text == null) {
+      return null;
+    }
+
+    // print or redirect text
+    handleOutput(text);
+    return text;
+  }
+
+  /**
+   * Get string arguments of echo.
+   * 
+   * @param shellInput  Arrays of command arguments
+   * @return  String array of echo argument without redirection
+   */
+  protected String[] getArguments(String[] shellInput) {
+    // check for redirection first
+    String inputString = super.getArgumentsString(shellInput);
+    // get the string(with spaces inside)
+    if (inputString == null || inputString.equals("")) {
+      return new String[0];
+    }
+    // if no double quotes
+    if (!(inputString.indexOf("\"") < inputString.lastIndexOf("\""))) {
+      return shellInput;
+    }
+    /*
+     * split string and the remainder, string remain surrounded by double quotes
+     */
+    String echoString = inputString.substring(inputString.indexOf("\""),
+        inputString.lastIndexOf("\"") + 1);
+    String remainder = inputString.substring(inputString.lastIndexOf("\"") + 1);
+
+    // check if there is remainder after the string
+    if (remainder == null || remainder.equals("")) {
+      return new String[] {echoString};
+    } else {
+      return new String[] {echoString, remainder};
+    }
+  }
+}

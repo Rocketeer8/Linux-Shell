@@ -1,0 +1,196 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.Command;
+import commands.MakeDirectory;
+import driver.JShell;
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+import handling.InputParser;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import mock.MockPathHandler;
+import mock.MockStandardError;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class InputParserTest {
+
+  MakeDirectory mkdirObj;
+  FileSystem fs;
+  InputParser parser;
+  
+  /**
+   * Initialize related field for testing InputParser.
+   * @throws Exception  An exception InputParser can throw. 
+   */
+  @Before
+  public void setUp() throws Exception {
+    mkdirObj = new MakeDirectory(new int[] {-2});
+    fs = FileSystem.getInstance();
+    // inject mock objects
+    parser = new InputParser(new MockStandardError(), new MockPathHandler());
+  }
+  
+  /**
+   * Clear fileSystem after testing.
+   * @throws Exception  An exception InputParser can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    // reset FileSystem instance to empty after each test
+    Field field = (fs.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null); // setting the shellInstance parameter to null
+  }
+  
+  /**
+   * test if a path can be parse into a file.
+   */
+  @Test
+  public void parsePathToFileTest() {
+    // make a file and test parse path to a file
+    File fileA = new File("FileName");
+    fs.getRootDirectory().addToDir(fileA);
+    assertEquals(fileA, parser.parsePathToFile("/FileName"));
+  }
+  
+  /**
+   * test if a file path can be parse into a FileObj.
+   */
+  @Test
+  public void parsePathToFileObjTestForFile() {
+    // make directories and a file and test parse path to a file
+    mkdirObj.execute(new String[] {"dir1 dir1/dir2"});
+
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    Directory dir2 = (Directory) dir1.getSubFile("dir2");
+
+    File fileA = new File("FileName");
+    dir2.addToDir(fileA);
+
+    assertEquals(fileA, parser.parsePathToFileObj("/dir1/dir2/FileName"));
+  }
+  
+  /**
+   * test if a directory path can be parse into a FileObj.
+   */
+  @Test
+  public void parsePathToFileObjTestForDirectory() {
+    // make directories and test parse path to a directory
+    mkdirObj.execute(new String[] {"dir1 dir1/dir2 dir1/dir2/FileName"});
+
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    Directory dir2 = (Directory) dir1.getSubFile("dir2");
+    Directory dir3 = (Directory) dir2.getSubFile("FileName");
+
+    assertEquals(dir3, parser.parsePathToFileObj("/dir1/dir2/FileName"));
+  }
+  
+  /**
+   * test if a path can be parse into a directory.
+   */
+  @Test
+  public void parsePathToDirectoryTest() {
+    // make directories and test parse path to a directory
+    mkdirObj.execute(new String[] {"dir1 dir1/FileName"});
+
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    Directory dir2 = (Directory) dir1.getSubFile("FileName");
+
+    assertEquals(dir2, parser.parsePathToDirectory("dir1/FileName"));
+  }
+  
+  /**
+   * test if a path can be parse into a directory 
+   * at second last position of the path.
+   */
+  @Test
+  public void parsePathToSecondLastDirectoryTest() {
+    // make directories and test parse path to a second last directory
+    mkdirObj.execute(new String[] {"dir1 dir1/FileName dir1/FileName/dir3"});
+
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    Directory dir2 = (Directory) dir1.getSubFile("FileName");
+
+    assertEquals(dir2,
+        parser.parsePathToSecondLastDirectory("dir1/FileName/dir3"));
+  }
+  
+  /**
+   * test if a path can be parse into the target file's name.
+   */
+  @Test
+  public void parsePathToNameTest() {
+
+    assertEquals("FileName", parser.parsePathToName("/dir1/dir2/FileName"));
+  }
+  
+  /**
+   * test if a given number in string can be parse to an integer.
+   */
+  @Test
+  public void parseNumberArgumentToNumberTest() {
+    assertEquals(3, parser.parseNumberArgumentToNumber("3"));
+  }
+
+  /**
+   * test if extra double quotation inside string can be deleted with
+   * parseStringArgumentToString().
+   */
+  @Test
+  public void parseStringArgumentToStringTest() {
+    assertEquals("some string",
+        parser.parseStringArgumentToString("\"some string\""));
+  }
+  
+  /**
+   * Given a command name in string, test if it's valid and return the
+   * instance of the command if it is.
+   */
+  @Test
+  public void parseCommandArgumentToCommandTest() {
+
+    // initialize the command HashMap and put a command in it for testing
+    HashMap<String, Command> testCommands = new HashMap<String, Command>();
+    testCommands.put("mkdir", mkdirObj);
+    // set the JShell commands to our test command HashMap
+    JShell.setCommands(testCommands);
+
+    assertEquals(mkdirObj, parser.parseCommandArgumentToCommand("mkdir"));
+  }
+}

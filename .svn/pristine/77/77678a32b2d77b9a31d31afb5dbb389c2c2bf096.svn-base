@@ -1,0 +1,8 @@
+Class name: FileObj
+Parent class (if any): None
+Subclasses (if any): Directory, File
+
+Responsibilities:
+*Stores information either as Directory or File
+
+Collaborators:

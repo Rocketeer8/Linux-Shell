@@ -1,0 +1,9 @@
+What did I work on in the last three days?
+    - Finishing redirection for output commands
+    - Started testing classes
+
+What do I plan to work in the next three days?
+    - Testing classes
+
+Am I blocked on anything?
+    - Not sure on the return value for some void methods

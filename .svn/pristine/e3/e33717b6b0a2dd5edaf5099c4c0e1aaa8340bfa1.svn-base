@@ -1,0 +1,23 @@
+Class name: Command
+Parent class (if any): None
+Subclasses (if any):
+*ChangeDirectory
+*Copy
+*Exit
+*MakeDirectory
+*Move
+*OutputCommand
+*PopDirectory
+*PushDirectory
+*RemoveDirectory
+*RetrieveURL
+*SaveJShell
+
+Responsibilities:
+*Stores information for all commands(valid arguments, command name, documentation)
+*Executes a command
+
+
+Collaborators:
+*FileSystem
+*Standard Error

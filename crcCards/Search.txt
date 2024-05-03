@@ -1,0 +1,15 @@
+Class name: Search
+Parent class (if any): OutputCommand
+Subclasses (if any): None
+
+Responsibilities:
+*Searches if a file or directory is inside given directories
+
+Collaborators:
+*FileSystem
+*Directory
+*File
+*FileObj
+*InputParser
+*PathHandler
+*StandardError

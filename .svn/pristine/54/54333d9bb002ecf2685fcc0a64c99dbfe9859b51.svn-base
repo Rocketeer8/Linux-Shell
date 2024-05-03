@@ -1,0 +1,86 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileObj;
+import filesystem.FileSystem;
+import handling.InputParser;
+import handling.StandardError;
+
+/**
+ * This class is responsible for removing directories in the file system given
+ * the name of the directory to be removed.
+ * 
+ * @author Brandon
+ */
+public class RemoveDirectory extends Command {
+
+  private static final long serialVersionUID = 1L;
+
+  public RemoveDirectory(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+  }
+
+  private void remove(Directory rmDir) {
+    // helper function to be implemented
+  }
+  public void execute(String[] shellInput) {
+    // Check if DIR given is in Current Working Directory of one of it's parents
+    
+    InputParser parser = FileSystem.getInstance().getParser();
+    StandardError errorHandler = FileSystem.getInstance().getErrorHandler();
+    String[] arguments = super.getArguments(shellInput);
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+    
+    // get target dir to remove
+    FileObj fileObject = parser.parsePathToFileObj(arguments[0]);
+
+    // if the fileObject doesn't exist, return.
+    if (fileObject == null) {
+      return;
+    }
+    if (fileObject instanceof File) {
+      // for a file, do not remove
+      return;
+    } else {
+      // for a directory, remove it from it's parent directory and
+      // remove the parent directory as it's parent
+      Directory parent = fileObject.getParentDirectory();
+      parent.removeFromDir(fileObject);
+      fileObject.setParentDirectory(null);
+    }
+  }
+}

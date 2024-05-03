@@ -1,0 +1,13 @@
+Class name: Manual
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Display the documentation for commands
+
+Collaborators:
+*FileSystem
+*InputParser
+*Directory
+*Command
+

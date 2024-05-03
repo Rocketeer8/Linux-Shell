@@ -1,0 +1,9 @@
+Class name: SaveJShell
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Saving the current JShell state to a file
+
+Collaborators:
+*FileSystem

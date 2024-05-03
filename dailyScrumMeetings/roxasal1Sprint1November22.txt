@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Worked on RetrieveUrl Class and its methods
+    - Worked on Search Class and its methods
+
+What do I plan to work in the next three days?
+    - Finish RetrieveUrl methods
+    - Finish Search methods
+    - Work on Sprint 2 tasks
+		
+Am I blocked on anything?
+    - Do I treat a URL with a trailing "/" the same as one without?
+    - How should I print the search command?

@@ -1,0 +1,207 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileObj;
+import filesystem.FileSystem;
+import handling.InputParser;
+import handling.PathHandler;
+import handling.StandardError;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * The Search class is a Command that recursively searches
+ * if a file or directory is inside given directories.
+ *
+ * @author Aliel
+ */
+public class Search extends Command {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Constructs a new Search with its
+   * valid argument counts and documentation.
+   *
+   * @param validArgumentCounts Stores all the valid argument counts
+   *                            for Search
+   */
+  public Search(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+  }
+
+  /**
+   * If the size of arguments is in validArgumentCounts and argument has
+   * the required arguments, then this calls search
+   *
+   * @param shellInput An array of arguments for the command.
+   */
+  public void execute(String[] shellInput) {
+    // Splits the arguments of shellInput into an array of arguments
+    String[] arguments = this.getArguments(shellInput);
+    int numOfArguments = arguments.length;
+
+    // Checks if the arguments is a valid argument count
+    super.execute(arguments);
+
+    if (!(isCountValid && this.hasRequiredArguments(arguments))) {
+      return;
+    }
+
+    String fileName = arguments[numOfArguments - 1];
+    String fileType = arguments[numOfArguments - 3];
+
+    // Gives the directory arguments of argument
+    this.search(Arrays.copyOfRange(arguments,0,arguments.length-4),
+        fileName, fileType);
+  }
+
+  /**
+   * Returns true if arguments has the required arguments
+   * for the search command, and is in correct order.
+   * Returns false otherwise.
+   *
+   * @param arguments An array of arguments for the command.
+   * @return True if arguments has, in order, the required
+   * argument for the search command, or false otherwise.
+   */
+  private boolean hasRequiredArguments(String[] arguments) {
+    int numOfArguments = arguments.length;
+    StandardError errorHandler = FileSystem.getInstance().getErrorHandler();
+
+    // All calls for search must have these arguments at the specific indices
+    if (numOfArguments < 4) {
+      System.out.println("Argument count is too small");
+      return false;
+    } else if (!arguments[numOfArguments - 4].equals("-type")) {
+      System.out.println("\"-type\" is missing");
+      return false;
+    } else if (!(arguments[numOfArguments - 3].equals("f")
+        || arguments[numOfArguments - 3].equals("d"))) {
+      System.out.println("[\"f\"|\"d\"] is missing");
+      return false;
+    } else if (!arguments[numOfArguments - 2].equals("-name")) {
+      System.out.println("\"-name\" is missing");
+      return false;
+    } else {
+      return errorHandler.isValidFileName(arguments[numOfArguments - 1]);
+    }
+  }
+
+  /**
+   * Checks if fileName of object referenced in fileType is in
+   * the named directories in directories
+   *
+   * @param directories An array of directory names for the command.
+   * @param fileName The name of the file or directory to search.
+   * @param fileType Indicates the type of object to look for.
+   */
+  private void search(String[] directories, String fileName, String fileType) {
+    FileSystem fileSystem = FileSystem.getInstance();
+    InputParser parser = fileSystem.getParser();
+
+    for (String directory : directories) {
+      // Used to check is at least 1 directory has fileName of correct type
+      boolean ifFoundOnce = false;
+
+      Directory searchedDir = parser.parsePathToDirectory(directory);
+
+      if (searchedDir == null) {
+        return;
+      }
+
+      // Checks if fileName is in searchedDir and its subdirectories
+      if (this.searchDir(searchedDir, fileName, fileType, 0) > 0) {
+        ifFoundOnce = true;
+      }
+
+      // Checks if fileName was not found for searchedDir
+      if (!ifFoundOnce) {
+        System.out.println(fileName + " not found in " + directory);
+      }
+    }
+  }
+
+  /**
+   * Checks if fileName of object referenced in fileType is in
+   * the directory and its subdirectories.
+   *
+   * @param dir The directory to search
+   * @param fileName The name of the file or directory to search.
+   * @param fileType Indicates the type of object to look for.
+   * @param numFound Number of occurrences of fileName of
+   *                 object indicated by fileType
+   */
+  private int searchDir(Directory dir, String fileName, String fileType,
+      int numFound) {
+    PathHandler pathHandler = FileSystem.getInstance().getPathHandler();
+    FileObj fileObj = dir.getSubFile(fileName);
+    int sum = numFound;
+
+    if ((fileType.equals("f") && fileObj instanceof File)
+      || (fileType.equals("d") && fileObj instanceof Directory)) {
+      System.out.println(pathHandler.getPath(dir));
+      sum++;
+    }
+
+    ArrayList<Directory> subDirs = this.getSubDirectories(dir);
+
+    for (Directory subDir : subDirs) {
+      sum = sum + this.searchDir(subDir, fileName, fileType, sum);
+    }
+
+    return sum;
+  }
+
+  /**
+   * Returns an arraylist of the subdirectories of dir.
+   * Returns null if dir has no subdirectories.
+   *
+   * @param dir The Directory where the subdirectories are.
+   * @return An arraylist of the subdirectories of dir, or null
+   * if the dir has no subdirectories
+   */
+  private ArrayList<Directory> getSubDirectories(Directory dir) {
+    ArrayList<Directory> subDirs = new ArrayList<>();
+    ArrayList<String> subFiles = dir.subFileNameList();
+
+    for (String subFile : subFiles) {
+      if (dir.getSubFile(subFile) instanceof Directory) {
+        subDirs.add((Directory) dir.getSubFile(subFile));
+      }
+    }
+
+    return subDirs;
+  }
+}

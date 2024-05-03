@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+	-Completed LoadJShell class
+	-Completed SaveJShell class
+	-Implemented serialization into our design to aid in saving and loading the file system
+
+What do I plan to work in the next three days?
+	-Implement an iterator for the directory object
+	-Use the new iterator to traverse through the file system for the tree command class
+
+Am I blocked on anything?
+   	-Not blocked on anything

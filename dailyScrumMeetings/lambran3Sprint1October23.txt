@@ -1,0 +1,15 @@
+What did I work on in the last three days?
+    - brainstormed design ideas with team for receiving and parsing input commands
+    - implemented the Directory class and created methods for Directory objects
+    - implemented the MakeDirectory class to create directorys in the JShell
+    - tested implementation of Directory and MakeDirectory in JShell
+
+What do I plan to work in the next three days?
+    - update MakeDirectory class to work only with two arguments
+    - collaborate with team to update Directory class and File class so they work together
+    - update CRC Cards
+
+Am I blocked on anything?
+    - need Path class to finish implementing Directory class and MakeDirectory class
+    - need Error class and Output class to output errors
+    - need Command class to parse and run MakeDirectory command on JShell

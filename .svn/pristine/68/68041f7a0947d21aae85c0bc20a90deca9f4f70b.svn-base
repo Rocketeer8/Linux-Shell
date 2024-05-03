@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Implementing the File, Dir and Path classes
+    - Discussed the implementation design for parsing, error handling with teammates.
+
+What do I plan to work in the next three days?
+    - Refine and finish PathTraversal and Directory class.
+    - Disuss more about implementation design.
+
+Am I blocked on anything?
+    - Not sure if some classes should be instance or static class.
+    - Not sure if inheritance should be in Echo command
+    - Not sure how to effectively handle all the input errors from user.

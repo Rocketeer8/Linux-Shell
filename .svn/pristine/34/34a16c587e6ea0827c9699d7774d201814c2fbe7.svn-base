@@ -1,0 +1,12 @@
+Class name: Concatenate
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Display contents of one or more files
+
+Collaborators:
+*FileSystem
+*InputParser
+*File
+*Output

@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+    - began implementing test cases for RemoveDirectory
+    - tested and updated Move and Copy commands
+
+What do I plan to work in the next three days?
+    - finish implementing test cases for MoveDirectory and CopyDirectory
+    - add javadoc to the new classes
+    - update crcCards
+
+Am I blocked on anything?
+    - unsure about whether or not recursion is required in RemoveDirectory. Will  need to clarify in Office Hours

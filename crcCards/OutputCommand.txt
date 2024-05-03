@@ -1,0 +1,22 @@
+Class name: OutputCommand
+Parent class (if any): Command
+Subclasses (if any):
+*Concatenate
+*History
+*Echo
+*ListContent
+*Manual
+*PrintWorkingDirectory
+*Search
+*Tree
+
+Responsibilities:
+*Redirect output from commands to a file or to be displayed on the shell
+
+Collaborators:
+*Directory
+*File
+*FileSystem
+*InputParser
+*StandardError
+*Output

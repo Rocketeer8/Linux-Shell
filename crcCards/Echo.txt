@@ -1,0 +1,11 @@
+Class name: Echo
+Parent class (if any): OutputCommand
+Subclasses (if any): None
+
+Responsibilities:
+*Write to a file
+*Print to the shell
+
+Collaborators:
+*FileSystem
+*InputParser

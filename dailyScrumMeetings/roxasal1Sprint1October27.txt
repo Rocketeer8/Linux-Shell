@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - Brainstormed with team on implementation of the Echo class
+    - Working on EchoAppend class methods
+
+What do I plan to work in the next three days?
+    - Continue working on EchoAppend and have EchoAppend inherit Echo
+    - Work on the tasks for Sprint 2
+		
+Am I blocked on anything?
+    - Finalizing implementation of EchoAppend when inheriting Echo

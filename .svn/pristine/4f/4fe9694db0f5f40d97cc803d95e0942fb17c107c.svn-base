@@ -1,0 +1,11 @@
+Class name: PushDirectory
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Saves working directory to stack
+
+Collaborators:
+*FileSystem
+*PathHandler
+*Directory

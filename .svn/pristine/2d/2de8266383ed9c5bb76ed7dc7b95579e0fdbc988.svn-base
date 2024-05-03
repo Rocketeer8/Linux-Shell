@@ -1,0 +1,38 @@
+package commands;
+
+import filesystem.FileObj;
+import filesystem.FileSystem;
+
+public class Tree extends OutputCommand {
+
+  public Tree(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "tree"
+        + "\n\tFrom the root directory (‘\\’) display the entire file system "
+        + "\n\tas a tree.";
+  }
+
+  @Override
+  public void execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+    FileSystem fileSystem = FileSystem.getInstance();
+
+    super.execute(arguments);
+    if (!isCountValid || (hasRedirect() && outFile == null)) {
+      return;
+    }
+
+    handleOutput("/");
+
+    for (FileObj subFileObj : fileSystem.getRootDirectory()) {
+      for (int i = 0; i < subFileObj.getDepth(); i++) {
+        handleNoNewlineOutput("   ");
+      }
+      handleOutput(subFileObj.getName());
+    }
+
+
+  }
+
+}

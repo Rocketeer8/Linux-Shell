@@ -1,0 +1,77 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import commands.SaveJShell;
+
+/**
+ * This class is responsible for testing the SaveJShell class.
+ * 
+ * @author Marcus
+ */
+public class SaveJShellTest {
+
+  /** The SaveJShell instance to be tested. */
+  private SaveJShell saveJShell;
+
+  /**
+   * Initializes loadJShell.
+   * 
+   * @throws Exception An exception SaveJShell can throw.
+   */
+  @Before
+  public void setUp() throws Exception {
+    saveJShell = new SaveJShell(new int[] {1});
+  }
+
+  /**
+   * Tests execute with an invalid argument count.
+   */
+  @Test
+  public void executeTestInvalidArgumentCount() {
+    assertEquals("Invalid Arguments", saveJShell.execute(new String[] {}));
+    assertEquals("Invalid Arguments",
+        saveJShell.execute(new String[] {"file1 file2"}));
+  }
+
+  /**
+   * Tests execute with an invalid file name.
+   */
+  @Test
+  public void executeTestInvalidFileName() {
+    assertEquals("Invalid File Name",
+        saveJShell.execute(new String[] {"file*"}));
+  }
+
+}

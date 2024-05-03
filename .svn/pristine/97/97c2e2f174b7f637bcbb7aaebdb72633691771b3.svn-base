@@ -1,0 +1,13 @@
+Class name: Move
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Move a file or directory to a given path
+
+Collaborators:
+*FileSystem
+*InputParser
+*Directory
+*FileObj
+

@@ -1,0 +1,12 @@
+Class name: EchoOverwrite
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Overwrite a file
+
+Collaborators:
+*Shell
+*File
+*StandardError
+*PathTraversal

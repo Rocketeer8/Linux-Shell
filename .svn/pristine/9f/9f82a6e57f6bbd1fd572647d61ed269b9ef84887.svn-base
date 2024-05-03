@@ -1,0 +1,244 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package handling;
+
+import java.io.Serializable;
+import filesystem.Directory;
+import filesystem.File;
+import filesystem.FileSystem;
+
+/**
+ * This class help to break down path into useful info we need.
+ * 
+ * @author Brandon, Danny
+ *
+ */
+public class PathHandler implements Serializable{
+
+  
+  private static final long serialVersionUID = 1L;
+
+
+  /**
+   * This method traverse through the given path(only for directory path), while
+   * Checking its validity on the way and at the end return the file Object if
+   * traversal is successful.
+   * 
+   * @param path The path to do the traversal on
+   * @param fileNumber Which file to find on the path, -1 means the very last
+   *        file, -2 the second, etc.
+   * @return Returns the desired directory on the path
+   */
+  public Directory traverse(String path, int fileNumber) {
+
+    // Get starting directory, either the root or current working directory
+    Directory startingDir = getStartingDir(path);
+
+    // split path into readable file names
+    String[] splitedPath = analyzePath(path);
+
+    /*
+     * get the number of iteration in the path depending on the file number
+     * given
+     */
+    int numberOfIteration;
+    if (fileNumber < 0) {
+      numberOfIteration = splitedPath.length + fileNumber + 1;
+    } else {
+      numberOfIteration = fileNumber;
+    }
+
+    Directory tempDir = startingDir;
+
+    // Iterate through the path
+    for (int ind = 0; ind < numberOfIteration; ind++) {
+      tempDir = traverseHelper(tempDir, splitedPath[ind]);
+
+      if (tempDir == null) {
+        return null;
+      }
+    }
+
+    return tempDir;
+  }
+
+
+  /**
+   * traverse through the level of a path given a current directory to traverse
+   * in and a path argument. The path argument can be a file name or special
+   * operator like "." or "..".
+   * 
+   * @param curDir  The path directory that it's currently on
+   * @param pathArg  The next traverse destination
+   * @return  Return the directory on the next level.
+   */
+  private Directory traverseHelper(Directory curDir, String pathArg) {
+    // traverse through the given pathOfDir and return the last DirObj
+    // If path argument is "." then do not change tempDir
+
+    if (pathArg.equals(".")) {
+      return curDir;
+    } else if (pathArg.equals("..")) {
+      // If path argument is ".." go to parent directory
+
+      // Check if parent directory exists (case of root directory)
+      if (curDir.getParentDirectory() == null) {
+        return curDir;
+      } else {
+        // Set tempDir to it's parent directory
+        curDir = curDir.getParentDirectory();
+      }
+    } else if (curDir.getSubFile(pathArg) == null
+        || (curDir.getSubFile(pathArg) instanceof File)) {
+      /*
+       * path name not found or (path is a fileName and not the last one)
+       */
+      return null;
+    } else {
+      curDir = (Directory) curDir.getSubFile(pathArg);
+    }
+    return curDir;
+  }
+  
+  
+  /**
+   * Getting the starting directory of the path traverse to be traverse in.
+   * 
+   * @param path  The path to set the starting directory on
+   * @return  Return the starting directory for the path given
+   */
+  private Directory getStartingDir(String path) {
+    if ((Character.toString(path.charAt(0))).equals("/")) {
+      // absolute path start from root dir
+      return FileSystem.getInstance().getRootDirectory();
+    } else {
+      // relative path start from current dir
+      return FileSystem.getInstance().getWorkingDirectory();
+    }
+  }
+  
+  
+  /**
+   * start with the given directory name, build from the end of path 
+   * toward the root. (append at the front for each level)
+   * 
+   * @param dirToGetPathOn  The directory to get path on
+   * @return  Return the path given the directory
+   */
+  public String getPath(Directory dirToGetPathOn) {
+
+    FileSystem fileSystem = FileSystem.getInstance();
+    StringBuilder resultPath = new StringBuilder("");
+    Directory tempDir = dirToGetPathOn;
+
+    // for root directory, return "/" only
+    if (tempDir.equals(fileSystem.getRootDirectory())) {
+      return "/";
+    }
+    // stop before root
+    while (!(tempDir.equals(fileSystem.getRootDirectory()))) {
+      // build path backward until reach the root
+
+      resultPath.insert(0, "/" + tempDir.getName());
+      tempDir = tempDir.getParentDirectory();
+    }
+
+    return resultPath.toString();
+  }
+
+  
+  /**
+   * Given a path and index, return the name at that path index.
+   * @param path  Path to search index on
+   * @param index  Index determines which name in the path to return 
+   * @return  The name in the path specified by the index
+   */
+  public String getName(String path, int index) {
+    // this method get the name of file in path at a specific index
+    // if count from right to left, then it's -1, -2,-3...
+    FileSystem fileSystem = FileSystem.getInstance();
+    boolean isRoot = path.trim().startsWith("/");
+    String[] splitedPath = analyzePath(path);
+
+    // for path "/"
+    if (splitedPath.length == 0) {
+      if (isRoot) {
+        return fileSystem.getRootDirectory().getName();
+      } else {
+        return fileSystem.getWorkingDirectory().getName();
+      }
+    }
+
+    if (index < 0) {
+      return splitedPath[splitedPath.length + index];
+    } else {
+      return splitedPath[index];
+    }
+  }
+
+  
+  /**
+   * Split path into a list of readable file names(or special operator).
+   * @param path  Path to be split/analyze on.
+   * @return  The list of file names(or special operator) from the path
+   */
+  public String[] analyzePath(String path) {
+
+    // if path only contains slashes, the length of splitedPath is 1 NOT 0 
+    String[] splitedPath = path.replace('/', ' ').trim().split("\\s+");
+    
+    if (path.trim().length() == 0 
+            || splitedPath.length == 1 && splitedPath[0].equals("")) {
+      return new String[0];
+    } else {
+      return splitedPath;
+    }
+  }
+
+  
+  /**
+   * Get how many level deep the path is. For example, "/" and "file/" is one
+   * level deep, "dir1/dir2/dir3 is 3 level deep
+   * 
+   * @param path This is the path to get the level for
+   * @return This return the level number for the path
+   */
+  public int getLevel(String path) {
+    // simplify the path
+    path = path.trim().replaceAll("\\/+", "/");
+    if (path.equals("/")) {
+      // if the argument contain only slashes
+      return 1;
+    }
+    return path.split("/").length;
+  }
+
+}

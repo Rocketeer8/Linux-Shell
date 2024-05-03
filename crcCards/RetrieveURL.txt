@@ -1,0 +1,12 @@
+Class name: RetrieveURL
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Retrieves a file from a URL and saves it in the working directory
+
+Collaborators:
+*FileSystem
+*Directory
+*File
+

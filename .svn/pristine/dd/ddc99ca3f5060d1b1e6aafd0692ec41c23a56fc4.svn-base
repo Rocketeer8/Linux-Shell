@@ -1,0 +1,68 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import commands.ListContent;
+import commands.MakeDirectory;
+import filesystem.FileSystem;
+
+public class ListContentTest {
+
+	ListContent lsObj;
+	MakeDirectory mkdirObj;
+	FileSystem fs;
+	
+	@Before
+	public void setUp() throws Exception {
+		 mkdirObj = new MakeDirectory(new int[] {-2});
+		 fs = FileSystem.getInstance();
+		 lsObj = new ListContent(new int[] {-1});
+	}
+	
+  @After
+  public void tearDown() throws Exception
+  {
+	 // reset FileSystem instance to empty after each test
+    Field field = (fs.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null); //setting the shellInstance parameter to null
+  }
+
+	@Test
+	public void ExecuteTest() {
+		// test if listContent output is correct for current working directory
+		mkdirObj.execute(
+				new String[]{"dir1 dir1/dirInsideDir1 dir2"});
+		String lsOutput = lsObj.execute(new String[]{});
+		assertEquals(lsOutput, "dir1\ndir2\n");
+		
+	}
+	
+	@Test
+	public void ExecuteTestWithPath() {
+		// test if listContent output is correct for a given directory path
+		mkdirObj.execute(
+				new String[]{"dir1 dir1/dirInsideDir1 dir2"});
+		String lsOutput = lsObj.execute(new String[]{"/dir1"});
+		assertEquals(lsOutput, "dirInsideDir1\n");
+	}
+	
+	@Test
+	public void ExecuteTestRecursive() {
+		// test if listContent output is correct for recursive listing 
+		mkdirObj.execute(
+				new String[]
+						{"dir1 dir1/dirInsideDir1 dir2 dir2/dirInsideDir2"});
+		String lsOutput = lsObj.execute(new String[]{"-R"});
+		assertEquals(
+				lsOutput, "dir1\n  dirInsideDir1\ndir2\n  dirInsideDir2\n");
+		
+	}
+
+}

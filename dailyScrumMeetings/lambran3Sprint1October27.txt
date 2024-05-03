@@ -1,0 +1,13 @@
+What did I work on in the last three days?
+    - discussed changes to CRC Cards for new design with team
+    - worked with teammate to update Directory class to inherit from File class
+    - discussed how commands will be parsed and how to check valid command calls
+
+What do I plan to work in the next three days?
+    - update MakeDirectory class to work only with two arguments
+    - brainstorm how to implement Path class and discuss it with team
+    - continue to update CRC Cards to match our design
+
+Am I blocked on anything?
+    - need to implementing the parsing and calling of each individual command
+    - need somewhere to store current working directory and the root directory

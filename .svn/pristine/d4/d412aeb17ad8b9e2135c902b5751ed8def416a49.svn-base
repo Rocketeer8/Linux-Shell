@@ -1,0 +1,45 @@
+Sprint 3 Backlog.  
+November 4th (12:01 am) to November 10th (11:59 pm)
+
+
+User Stories from Product Backlog that we will address in this sprint:
+a) As a user, I can create at most 2 directories in any directory
+b) As a user, I can change my current directory
+c) As a user, I can display the content of any directory/directories
+d) As a user, I can keep track of my recent directories	
+e) As a user, I can display the path of a file or directory
+f) As a user, I can display the contents of one or more files
+g) As a user, I can create a file
+h) As a user, I can edit a file 
+i) As a user, I can determine what each commands does  
+
+
+Specific tasks to be accomplished:
+a-1. (MakeDirectory) Finish MakeDirectory class (finish execute method)
+b-1. (ChangeDirectory) Implement ChangeDirectory class (execute method)
+c-1. (ListContent) Make small changes to ListContent class to accommodate for InputParser
+d-1. (PopDirectory) Implement PopDirectory class
+e-1. (PathTraversal) Implement method for converting a directory to its full path
+f-1. (Concatenate) Implement Concatenate class for printing files
+g-1. (Echo) Implement noOutFile method in Echo class for creating a new file
+h-1. (EchoAppend) Make small finishing changes to EchoAppend class
+h-2. (EchoOverwrite) Implement EchoOverwrite class
+i-1. (Manual) Implement Manual class for printing command documentation
+i-2. Add documentation for each command class
+i-3. Finish CRC cards
+
+
+
+These tasks are assigned as follows:
+
+User: Marcus Pasquariello
+Tasks: f-1, i-1, i-2, a-1
+
+User: Brandon Lam
+Tasks: i-3
+
+User: Aliel Jacob Roxas
+Tasks: d-1, h-1, h-2
+
+User: Danny Liu
+Tasks: b-1, c-1, e-1, g-1

@@ -1,0 +1,14 @@
+Class name: ListContent
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*List content of a directory
+*Display the path of a file
+
+Collaborators:
+*FileSystem
+*Directory
+*FileObj
+*File
+*Output

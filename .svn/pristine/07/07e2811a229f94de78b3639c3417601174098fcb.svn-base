@@ -1,0 +1,130 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.MakeDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+import handling.PathHandler;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class MakeDirectoryTest {
+
+  PathHandler phObj;
+  MakeDirectory mkdirObj;
+  FileSystem fs;
+  
+  /**
+   * Initialize related field for testing MakeDirectory.
+   * @throws Exception  An exception MakeDirectory can throw. 
+   */
+  @Before
+  public void setUp() throws Exception {
+    mkdirObj = new MakeDirectory(new int[] {-2});
+    fs = FileSystem.getInstance();
+    phObj = new PathHandler();
+  }
+  
+  /**
+   * Clear fileSystem after testing.
+   * @throws Exception  An exception MakeDirectory can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    // reset FileSystem instance to empty after each test
+    Field field = (fs.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null); // setting the shellInstance parameter to null
+  }
+  
+  /**
+   * test execute() with directory's name.
+   */
+  @Test
+  public void executeTestNoPath() {
+    // make directory and get the made directory
+    ArrayList<Directory> dirList = mkdirObj.execute(new String[] {"dir1"});
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    // test if the made directory exist
+    assertEquals(dir1, dirList.get(0));
+  }
+  
+  /**
+   * test execute() with directory's path.
+   */
+  @Test
+  public void executeTestWithPath() {
+    // get list of directories that was made
+    ArrayList<Directory> dirList =
+        mkdirObj.execute(new String[] {"dir1 dir1/dirInsideDir1"});
+
+    // get the excepted directories as a list
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+    Directory dirInsideDir1 = (Directory) dir1.getSubFile("dirInsideDir1");
+
+    ArrayList<Directory> exceptedList =
+        new ArrayList<Directory>(Arrays.asList(dir1, dirInsideDir1));
+
+    // compare the two list
+    assertEquals(dirList, exceptedList);
+  }
+  
+  /**
+   * test execute() with bad path.
+   */
+  @Test
+  public void executeTestInvalidPath() {
+    // get list of directories that was made
+    ArrayList<Directory> dirList =
+        mkdirObj.execute(new String[] {"dir1 dir1/badPath/dirInsideDir1"});
+
+    // get the excepted directories as a list
+    Directory dir1 = (Directory) fs.getRootDirectory().getSubFile("dir1");
+
+    // second directory should be null because it has a bad path
+    ArrayList<Directory> exceptedList =
+        new ArrayList<Directory>(Arrays.asList(dir1, null));
+
+    // compare the two list
+    assertEquals(dirList, exceptedList);
+  }
+
+
+
+}

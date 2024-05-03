@@ -1,0 +1,13 @@
+Class name: PopDirectory
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Remove top entry from Directory stack
+*Change working directory to top entry
+
+Collaborators:
+*FileSystem
+*StandardError
+*PathHandler
+*Directory

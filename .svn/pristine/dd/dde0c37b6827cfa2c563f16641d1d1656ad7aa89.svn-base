@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+    - discuss with team changes needed for the execute method inside commands
+    - fixed bugs with the Path traversal
+
+What do I plan to work in the next three days?
+    - check for bugs in the program
+    - add comments and javadoc
+    - finish the CRC cards to reflect our final design
+
+Am I blocked on anything?
+    - need to finish echo command to test the whole shell (minor issue)

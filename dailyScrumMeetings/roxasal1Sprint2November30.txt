@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+    - Finished RetrieveUrl Class and its methods
+    - Finished Search Class and its methods
+    - Finished JUnits for:
+      - History, PopDirectory, PushDirectory, PrintWorkingDirectory,
+      - RetrieveUrl, and Search
+
+What do I plan to work in the next three days?
+    - n/a
+		
+Am I blocked on anything?
+    - n/a

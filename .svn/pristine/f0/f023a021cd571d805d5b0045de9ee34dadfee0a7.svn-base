@@ -1,0 +1,153 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package driver;
+
+import commands.ChangeDirectory;
+import commands.Command;
+import commands.Concatenate;
+import commands.Copy;
+import commands.Echo;
+import commands.Exit;
+import commands.History;
+import commands.ListContent;
+import commands.LoadJShell;
+import commands.MakeDirectory;
+import commands.Manual;
+import commands.Move;
+import commands.PopDirectory;
+import commands.PrintWorkingDirectory;
+import commands.PushDirectory;
+import commands.RemoveDirectory;
+import commands.RetrieveUrl;
+import commands.SaveJShell;
+import commands.Search;
+import commands.Tree;
+import filesystem.FileSystem;
+import handling.StandardError;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
+
+/**
+ * The JShell class takes in the user input, and calls the appropriate methods
+ * for executing the command.
+ * 
+ * @author Marcus
+ *
+ */
+public class JShell {
+
+  /** The hash map mapping a command name to is corresponding command. */
+  private static HashMap<String, Command> commands;
+
+  /**
+   * Takes in the user input, parses the input into the command and its
+   * arguments. If the command is valid, call the appropriate execute method,
+   * otherwise prints an error message.
+   * 
+   */
+  public static void main(String[] args) {
+
+    initializeCommands();
+    Scanner scanner = new Scanner(System.in);
+    FileSystem fileSystem = FileSystem.getInstance();
+    StandardError errorHandler = fileSystem.getErrorHandler();
+
+    while (!fileSystem.isCloseShell()) {
+      fileSystem = FileSystem.getInstance();
+      String input = scanner.nextLine();
+      // Skips everything if the input is only whitespace
+      if (input.isBlank()) {
+        continue;
+      }
+
+
+      String[] inputList = shellInputCleanup(input);
+      String commandName = inputList[0];
+      // Adding the input to command history
+      fileSystem.getCommandHistory().add(input);
+      if (errorHandler.isValidCommand(commandName)) {
+        Command command = commands.get(commandName);
+        // Executing the command
+        command.execute(Arrays.copyOfRange(inputList, 1, inputList.length));
+      }
+    }
+    scanner.close();
+  }
+
+
+  private static String[] shellInputCleanup(String input) {
+    // handle redirection if it exist
+    if (input.indexOf(">") != -1) {
+      input = input.substring(0, input.indexOf(">")) + " "
+          + input.substring(input.indexOf(">"));
+    }
+    // Splits the list into the command and the arguments
+    return input.trim().split("\\s+", 2);
+  }
+
+  /**
+   * Adds each of the predetermined commands to the command hash map, and
+   * initialized them with their appropriate argument counts.
+   */
+  private static void initializeCommands() {
+    commands = new HashMap<String, Command>();
+    commands.put("exit", new Exit(new int[] {0}));
+    commands.put("mkdir", new MakeDirectory(new int[] {-2}));
+    commands.put("ls", new ListContent(new int[] {-1}));
+    commands.put("history", new History(new int[] {0, 1}));
+    commands.put("pushd", new PushDirectory(new int[] {1}));
+    commands.put("popd", new PopDirectory(new int[] {0}));
+    commands.put("pwd", new PrintWorkingDirectory(new int[] {0}));
+    commands.put("man", new Manual(new int[] {1}));
+    commands.put("cat", new Concatenate(new int[] {-2}));
+    commands.put("cd", new ChangeDirectory(new int[] {1}));
+    commands.put("echo", new Echo(new int[] {1, 2, 3}));
+    commands.put("saveJShell", new SaveJShell(new int[] {1}));
+    commands.put("loadJShell", new LoadJShell(new int[] {1}));
+    commands.put("tree", new Tree(new int[] {0}));
+    commands.put("search", new Search(new int[] {-5}));
+    commands.put("curl", new RetrieveUrl(new int[] {1}));
+    commands.put("rm", new RemoveDirectory(new int[] {1}));
+    commands.put("mv", new Move(new int[] {2}));
+    commands.put("cp", new Copy(new int[] {2}));
+  }
+
+  /**
+   * Getter for the commands hash map.
+   * 
+   * @return The file systems commands hash map.
+   */
+  public static HashMap<String, Command> getCommands() {
+    return commands;
+  }
+
+}

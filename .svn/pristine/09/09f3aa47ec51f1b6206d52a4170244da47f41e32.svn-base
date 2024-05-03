@@ -1,0 +1,136 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package test;
+
+import static org.junit.Assert.assertEquals;
+
+import commands.PrintWorkingDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+import handling.PathHandler;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * This class is responsible for for testing the PrintWorkingDirectory class.
+ *
+ * @author Aliel
+ */
+public class PrintWorkingDirectoryTest {
+
+  /** The FileSystem instance used for testing. */
+  FileSystem fileSystem;
+  /** The PrintWorkingDirectory instance to be tested */
+  PrintWorkingDirectory pwd;
+
+  /**
+   * Initializes fileSystem and pwd.
+   */
+  @Before
+  public void setUp() {
+    fileSystem = FileSystem.getInstance();
+    pwd = new PrintWorkingDirectory(new int[] {0});
+  }
+
+  /**
+   * Sets the singleton fileSystem object to null, for the purpose of testing
+   * again.
+   *
+   * @throws Exception An exception PrintWorkingDirectory can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    Field field = (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  /**
+   * Tests execute with an invalid argument count.
+   */
+  @Test
+  public void testExecuteWithInvalidArgCount() {
+
+    // Checks case with one arg, arg type does not matter
+    assertEquals("Inv Args", pwd.execute(new String[] {"a"}));
+
+    // Checks case with multiple args, arg types do not matter
+    assertEquals("Inv Args", pwd.execute(new String[] {"1 ?"}));
+  }
+
+  /**
+   * Tests execute with root as the working directory.
+   */
+  @Test
+  public void testExecuteWithRootAsDirectory() {
+    PathHandler pathHandler = fileSystem.getPathHandler();
+
+    // Gets name of current working directory
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String workingDirPath = pathHandler.getPath(workingDir);
+    assertEquals(workingDirPath, pwd.execute(new String[] {}));
+  }
+
+  /**
+   * Tests execute with not root as the working directory.
+   */
+  @Test
+  public void testExecuteWithNonRootAsDirectory() {
+    PathHandler pathHandler = fileSystem.getPathHandler();
+
+    // Sets expectedDir as new working directory
+    Directory expectedDir = new Directory("expectedDir");
+    expectedDir.setParentDirectory(fileSystem.getWorkingDirectory());
+    fileSystem.getWorkingDirectory().addToDir(expectedDir);
+    fileSystem.setWorkingDirectory(expectedDir);
+
+    // Gets name of current working directory
+    Directory workingDir = fileSystem.getWorkingDirectory();
+    String workingDirPath = pathHandler.getPath(workingDir);
+    assertEquals(workingDirPath, pwd.execute(new String[] {}));
+  }
+
+  /**
+   * Tests execute with no working directory.
+   */
+  @Test
+  public void testExecuteWithNoWorkingDirectory() {
+
+    /*
+     * Sets working directory to null, even if it may not be possible in an
+     * actual code.
+     */
+    fileSystem.setWorkingDirectory(null);
+    assertEquals("No Working Dir", pwd.execute(new String[] {}));
+  }
+}

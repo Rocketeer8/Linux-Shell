@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - Finished implementing methods for classes:
+      - EchoAppend, EchoOverwrite, History, PushDirectory
+      - PrintWorkingDirectory, PopDirectory
+
+What do I plan to work in the next three days?
+    - Add JavaDocs to the classes above
+		
+Am I blocked on anything?
+    - Need absolute path working to test PopDirectory more

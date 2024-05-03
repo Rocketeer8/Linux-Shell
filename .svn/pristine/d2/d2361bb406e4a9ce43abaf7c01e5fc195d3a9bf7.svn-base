@@ -1,0 +1,12 @@
+What did I work on in the last three days?
+	- Completed Exit and exit command
+    - Worked on EchoAppend and echo command for appending
+    - Brainstormed with team on implementation of the echo command 
+
+What do I plan to work in the next three days?
+    - Continue working on EchoAppend
+		- Work on echo command for appending and creating a new file
+		
+Am I blocked on anything?
+    - Need File to complete EchoAppend
+	  - Should EchoAppend need inheritance with EchoOverwrite or vice versa

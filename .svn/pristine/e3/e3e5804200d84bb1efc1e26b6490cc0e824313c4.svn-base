@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - brainstormed the design ideas for file class and echo commands
+
+What do I plan to work in the next three days?
+    - finish File class
+    - start working on Echo command class
+
+Am I blocked on anything?
+    - Not sure how content of a file should be store.
+    - Not sure if inheritance should be in Echo command

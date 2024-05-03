@@ -1,0 +1,17 @@
+Class name: Echo
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Write to a file
+*Print to the shell
+
+Collaborators:
+*FileSystem
+*InputParser
+*File
+*Directory
+*Output
+*StandardError
+*EchoAppend
+*EchoOverwrite

@@ -1,0 +1,64 @@
+package test;
+
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import commands.ChangeDirectory;
+import commands.MakeDirectory;
+import filesystem.Directory;
+import filesystem.FileSystem;
+
+public class ChangeDirectoryTest {
+	
+	ChangeDirectory cdObj;
+	MakeDirectory mkdirObj;
+	FileSystem fs;
+	
+	@Before
+	public void setUp() throws Exception {
+		 cdObj = new ChangeDirectory(new int[] {1});
+		 mkdirObj = new MakeDirectory(new int[] {-2});
+		 fs = FileSystem.getInstance();
+	}
+	
+  @After
+  public void tearDown() throws Exception
+  {
+	 // reset FileSystem instance to empty after each test
+    Field field = (fs.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null); //setting the shellInstance parameter to null
+  }
+
+	
+  @Test
+	public void executeTestNoPath() {
+	  	// need to make directory  to test cd 
+		mkdirObj.execute(new String[]{"dir1"});
+		Directory dir = cdObj.execute(new String[]{"dir1"});
+		assertEquals(fs.getWorkingDirectory(), dir);
+	}
+	
+	@Test
+	public void executeTestWithPath() {
+		// make directories so can test cd 
+		mkdirObj.execute(new String[]{"dir1"});
+		mkdirObj.execute(new String[]{"dir1/dirInsideDir1"});
+		Directory dir = cdObj.execute(new String[]{"dir1/dirInsideDir1"});
+		assertEquals(fs.getWorkingDirectory(), dir);
+	}
+	
+	@Test
+	public void executeTestNoChange() {
+		
+		// if cd to a non-existing dir, workingdirectory shouldn't change
+		Directory dir = cdObj.execute(new String[]{"dir1"});
+		assertEquals(fs.getWorkingDirectory(), fs.getRootDirectory());
+	}
+	
+}

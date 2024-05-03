@@ -1,0 +1,100 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package filesystem;
+
+
+/**
+ * This is the class the represent a common file(doesn't include directory).
+ * This class inherit from FileObj class.
+ * 
+ * @author Danny
+ */
+public class File extends FileObj {
+  
+  private static final long serialVersionUID = 1L;
+  /**
+   * This variable is the textual representation of the file.
+   */
+  private StringBuilder stringContent;
+
+  /**
+   * Constructor of File. Once called, Initialize the name of the file.
+   * 
+   * @param name Name of the file.
+   */
+  public File(String name) {
+    super(name);
+    // initialize stringContent
+    stringContent = new StringBuilder("");
+  }
+
+  /**
+   * Overloaded constructor of File. Once called, Initialize the name of the
+   * file and it's text content.
+   * 
+   * @param name Name of the file.
+   * @param stringContent Text content of the file.
+   */
+  public File(String name, String stringContent) {
+    /*
+     * both name and stringContent in the parameter is local variable, not the
+     * instance variable
+     */
+    super(name);
+    this.stringContent = new StringBuilder(stringContent);
+  }
+
+  /**
+   * This method append text content to the end of the file.
+   * 
+   * @param textContent Text content to be added into the file
+   */
+  public void addToTextContent(String textContent) {
+    this.stringContent.append(textContent);
+  }
+
+  /**
+   * This method empty the text content of the file.
+   */
+  public void clearTextContent() {
+    this.stringContent.setLength(0);
+  }
+
+  /**
+   * This method gives back the text content of the file.
+   * 
+   * @return This returns text content of the file
+   */
+  public String toString() {
+    return this.stringContent.toString();
+  }
+ 
+}

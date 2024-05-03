@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+    - Worked on RetrieveUrl Class and its methods
+    - Worked on Search Class and its methods
+
+What do I plan to work in the next three days?
+    - Finish RetrieveUrl methods
+    - Finish Search methods
+		
+Am I blocked on anything?
+    - n/a

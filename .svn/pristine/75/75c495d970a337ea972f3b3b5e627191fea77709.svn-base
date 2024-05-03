@@ -1,0 +1,78 @@
+package commands;
+
+import filesystem.FileSystem;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import output.ErrorOutput;
+
+/**
+ * This class is responsible for loading a previously saved mock JShell onto the
+ * current mock JShell.
+ * 
+ * @author Marcus
+ *
+ */
+public class LoadJShell extends Command {
+
+  /**
+   * Creates a new LoadJShell object with the commands valid arguments counts
+   * and LoadJShell's specific documentation.
+   * 
+   * @param validArgumentCounts The array of valid argument counts
+   */
+  public LoadJShell(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "loadJShell FileName"
+        + "\n\tLoads the contents of file FileName and renstantites everything"
+        + "\n\tthat was previously saved into FileName. This must be the first"
+        + "\n\tcommand typed in a new shell.";
+  }
+
+  /**
+   * If no commands have been put into the shell, and the input is a valid
+   * JShell save file, loads previous JShell onto the current one.
+   * 
+   * @param shellInput An array of arguments for the command.
+   */
+  @Override
+  public FileSystem execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+
+    // Checks if the number of arguments is valid
+    super.execute(arguments);
+    if (!isCountValid) {
+      return null;
+    }
+
+    // Checks if a command has been inputed into the JShell
+    if (FileSystem.getInstance().getCommandHistory().size() > 1) {
+      ErrorOutput.println("Cannot load JShell onto a modified session");
+      return null;
+    }
+
+    try {
+      // Creates the input streams for the file containing the serialized JShell
+      FileInputStream fileIn;
+      ObjectInputStream objectIn;
+      fileIn = new FileInputStream("savedJShells/" + shellInput[0]);
+      objectIn = new ObjectInputStream(fileIn);
+
+      // Sets the current JShell to the saved one
+      FileSystem.getInstance()
+          .setFileSystem((FileSystem) objectIn.readObject());
+      objectIn.close();
+      fileIn.close();
+
+    } catch (IOException e) {
+      ErrorOutput.println(shellInput[0] + " does not exist.");
+      return null;
+    } catch (ClassNotFoundException c) {
+      ErrorOutput.println("Class not found");
+      return null;
+    }
+    return FileSystem.getInstance();
+  }
+
+}

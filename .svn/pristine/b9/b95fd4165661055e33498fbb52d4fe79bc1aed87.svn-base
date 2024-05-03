@@ -1,0 +1,20 @@
+package mock_classes;
+
+import handling.PathHandler;
+
+
+/**
+ * This is a mock class for PathHandler, the methods only obey 
+ * signature and return type, it bypass the implementation
+ * 
+ * @author danny
+ */
+public class MockPathHandler extends PathHandler{
+
+	private static final long serialVersionUID = 1L;
+	
+	public String getName(String path, int index) {
+		return "FileName";
+	}
+
+}

@@ -1,0 +1,15 @@
+Class name: JShell
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Initialize the Shell
+*Take in user input
+*Appropriately execute the input as a shell command
+
+Collaborators:
+*Directory
+*FileSystem
+*InputParser
+*PathHandler
+*StandardError

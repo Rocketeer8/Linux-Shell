@@ -1,0 +1,11 @@
+What did I work on in the last three days?
+	-Added documentation for SaveJShell, LoadJShell, Tree and the Directory iterator class
+	-Moved commands from FileSystem to JShell class
+
+
+
+What do I plan to work in the next three days?
+	-Finish testing for various classes
+
+Am I blocked on anything?
+   	-N/A

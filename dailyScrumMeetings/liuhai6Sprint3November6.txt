@@ -1,0 +1,13 @@
+What did I work on in the last three days?
+    - Finish Implemented Echo
+    - improved pathtraversal and file object design.
+    - Discussed the implementation design for parsing and implementation of command classes with teammates
+
+What do I plan to work in the next three days?
+    - Refine and finish PathTRaversal
+    - javadoc
+    - Talk more about implementation design.
+
+Am I blocked on anything?
+    - Not sure if path class should use singleton or just static
+    - error handling confusion, are all cases covered?

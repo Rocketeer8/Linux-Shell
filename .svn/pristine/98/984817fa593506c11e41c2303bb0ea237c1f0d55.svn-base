@@ -1,0 +1,78 @@
+// **********************************************************
+// Assignment2:
+// Student1: Marcus Pasquariello
+// UTORID user_name: pasqua39
+// UT Student #: 1006258477
+// Author: Marcus Pasquariello
+//
+// Student2: Aliel Jacob Roxas
+// UTORID user_name: roxasal1
+// UT Student #: 1005954781
+// Author: Aliel Jacob Roxas
+//
+// Student3: Danny Liu
+// UTORID user_name: liuhai6
+// UT Student #: 1004258000
+// Author: Danny Liu
+//
+// Student4: Brandon Lam
+// UTORID user_name: lambran3
+// UT Student #: 1003383484
+// Author: Brandon Lam
+//
+//
+// Honor Code: I pledge that this program represents my own
+// program code and that I have coded on my own. I received
+// help from no one in designing and debugging my program.
+// I have also read the plagiarism section in the course info
+// sheet of CSC B07 and understand the consequences.
+// *********************************************************
+
+package commands;
+
+import filesystem.Directory;
+import filesystem.FileObj;
+import filesystem.FileSystem;
+import handling.InputParser;
+
+/**
+ * This class is responsible for moving a file or directory in the file system
+ * given the path of the destination directory to be moved to.
+ * 
+ * @author Brandon
+ */
+public class Move extends Command {
+
+  public Move(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "mv OLDPATH NEWPATH"
+        + "\n\tMove item OLDPATH to NEWPATH. Both OLD- PATH and NEWPATH may "
+        + "\n\tbe relative to the current directory or may be full paths. "
+        + "\n\tIf NEWPATH is a directory, move the item into the directory.";
+  }
+
+  public void execute(String[] shellInput) {
+    // Check if DIR given is in Current Working Directory of one of it's parents
+
+    InputParser parser = FileSystem.getInstance().getParser();
+    String[] arguments = super.getArguments(shellInput);
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+
+    // get target directory to move
+    FileObj itemToMove = parser.parsePathToFileObj(arguments[0]);
+    // get destination to move to
+    Directory destination = parser.parsePathToDirectory(arguments[1]);
+    // if the item or destination doesn't exist, return.
+    if (itemToMove == null || destination == null) {
+      return;
+    } else {
+      Directory itemToMoveParent = itemToMove.getParentDirectory();
+      destination.addToDir(itemToMove);
+      itemToMove.setParentDirectory(destination);
+      itemToMoveParent.removeFromDir(itemToMove);
+    }
+  }
+}

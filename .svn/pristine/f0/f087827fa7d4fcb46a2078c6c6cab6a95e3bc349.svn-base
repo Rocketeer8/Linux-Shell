@@ -1,0 +1,12 @@
+Class name: PathHandler
+Parent class (if any): None
+Subclasses (if any): None
+
+Responsibilities:
+*Traverse through a given path
+*Get a path of a file
+
+Collaborators:
+*FileSystem
+*Directory
+*StandardError

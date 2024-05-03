@@ -1,0 +1,88 @@
+package test;
+
+import static org.junit.Assert.*;
+import java.lang.reflect.Field;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import commands.LoadJShell;
+import filesystem.FileSystem;
+
+/**
+ * This class is responsible for testing the LoadJShell class.
+ * 
+ * @author Marcus
+ */
+public class LoadJShellTest {
+
+  /** The FileSystem instance used for testing. */
+  private FileSystem fileSystem;
+  /** The LoadJShell instance to be tested. */
+  private LoadJShell loadJShell;
+
+  /**
+   * Initializes fileSystem and cat.
+   * 
+   * @throws Exception An exception Concatenate can throw.
+   */
+  @Before
+  public void setUp() throws Exception {
+    fileSystem = FileSystem.getInstance();
+    loadJShell = new LoadJShell(new int[] {1});
+  }
+
+  /**
+   * Sets the singleton fileSystem object to null, for the purpose of testing
+   * again.
+   * 
+   * @throws Exception An exception Concatenate can throw.
+   */
+  @After
+  public void tearDown() throws Exception {
+    Field field = (fileSystem.getClass()).getDeclaredField("shellInstance");
+    field.setAccessible(true);
+    field.set(null, null);
+  }
+
+  /**
+   * Tests execute with an invalid argument count.
+   */
+  @Test
+  public void executeTestInvalidArgumentCount() {
+    assertNull(loadJShell.execute(new String[] {}));
+    assertNull(loadJShell.execute(new String[] {"file1 file2"}));
+  }
+
+  /**
+   * Tests execute where a command has been inputed before LoadJShell.
+   */
+  @Test
+  public void executeTestNotFirstCommand() {
+    fileSystem.getCommandHistory().add("first command");
+    fileSystem.getCommandHistory().add("loadJShell testfile1");
+    // testfile1 is a valid file, so this returns null because a command was
+    // inputed before loadJShell
+    assertNull(loadJShell.execute(new String[] {"testfile1"}));
+  }
+
+  /**
+   * Tests execute with an invalid file (does not exist).
+   */
+  @Test
+  public void executeTestInvalidFile() {
+    assertNull(loadJShell.execute(new String[] {"invalidfile"}));
+  }
+
+  /**
+   * Tests execute with a valid file containing a file system with various
+   * directories, files, and command history.
+   */
+  @Test
+  public void executeTestValidFile() {
+    fileSystem = loadJShell.execute(new String[] {"testfile1"});
+    assertNotNull(fileSystem.getRootDirectory().getSubFile("dir1"));
+    assertEquals("mkdir dir1 dir2", fileSystem.getCommandHistory().get(0));
+    assertEquals("dir1", fileSystem.getWorkingDirectory().getName());
+  }
+
+}

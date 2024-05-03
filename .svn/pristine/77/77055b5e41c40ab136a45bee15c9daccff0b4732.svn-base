@@ -1,0 +1,10 @@
+What did I work on in the last three days?
+	-Implemented a large portion of the InputParser class
+	-Implemented the Shell class to hold various information required for the commands 	 to execute
+	-Update the StandardError class
+
+What do I plan to work in the next three days?
+	-Try to make accessing the shell more efficient (maybe try using singleton)
+
+Am I blocked on anything?
+   	-Need a path handling class so I can perform the correct checks and parsing for a 	 given file or directory

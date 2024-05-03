@@ -1,0 +1,40 @@
+package commands;
+
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import filesystem.FileSystem;
+
+public class SaveJShell extends Command {
+
+  public SaveJShell(int[] validArgumentCounts) {
+    super(validArgumentCounts);
+    this.documentation = "saveJShell FileName"
+        + "\n\tSaves the entire state of the program file FileName.";
+  }
+
+  public void execute(String[] shellInput) {
+
+    String[] arguments = super.getArguments(shellInput);
+
+    super.execute(arguments);
+    if (!isCountValid) {
+      return;
+    }
+
+    try {
+      FileOutputStream fileOut;
+      ObjectOutputStream objectOut;
+      fileOut = new FileOutputStream("savedJShells/" + shellInput[0]);
+      objectOut = new ObjectOutputStream(fileOut);
+      objectOut.writeObject(FileSystem.getInstance());
+      objectOut.close();
+      fileOut.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+}

@@ -1,0 +1,11 @@
+Class name: History
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Display a history of user command calls
+
+Collaborators:
+*FileSystem
+*InputParser
+*Output

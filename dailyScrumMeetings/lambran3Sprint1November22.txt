@@ -1,0 +1,13 @@
+What did I work on in the last three days?
+    - finish implementing RemoveDirectory
+    - began implementing MoveDirectory and CopyDirectory
+    - add comments new classes
+
+What do I plan to work in the next three days?
+    - finish implementing and test MoveDirectory and CopyDirectory
+    - add javadoc to the new classes
+    - update crcCards
+    - implement test cases
+
+Am I blocked on anything?
+    - Not blocked on anything. However, I am unsure about whether or not recursion is required in RemoveDirectory.

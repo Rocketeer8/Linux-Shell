@@ -1,0 +1,71 @@
+package test;
+
+import static org.junit.Assert.*;
+import java.util.HashMap;
+import org.junit.Before;
+import org.junit.Test;
+import commands.Command;
+import commands.MakeDirectory;
+import commands.Manual;
+import driver.JShell;
+
+/**
+ * This class is responsible for testing the Concatenate class.
+ * 
+ * @author Marcus
+ */
+public class ManualTest {
+
+  /** The Manual instance to be tested. */
+  private Manual man;
+
+  /**
+   * Initializes man and resets the commands on the JShell.
+   * 
+   * @throws Exception An exception Manual can throw.
+   */
+  @Before
+  public void setUp() throws Exception {
+    man = new Manual(new int[] {1});
+    JShell.setCommands(new HashMap<String, Command>());
+  }
+
+  /**
+   * Tests execute with an invalid argument count.
+   */
+  @Test
+  public void executeTestInvalidArgumentCount() {
+    assertEquals("Invalid arguments", man.execute(new String[] {}));
+    assertEquals("Invalid arguments", man.execute(new String[] {"mkdir ls"}));
+  }
+
+  /**
+   * Tests execute with an invalid command.
+   */
+  @Test
+  public void executeTestInvalidCommand() {
+    JShell.getCommands().put("mkdir", new MakeDirectory(new int[] {-2}));
+    assertEquals("Invalid command", man.execute(new String[] {"ls"}));
+    assertEquals("Invalid command", man.execute(new String[] {"cd"}));
+  }
+
+  /**
+   * Tests execute with a valid command.
+   */
+  @Test
+  public void executeTestValidCommand() {
+    String documentation;
+
+    JShell.getCommands().put("mkdir", new MakeDirectory(new int[] {-2}));
+    JShell.getCommands().put("man", new Manual(new int[] {1}));
+    documentation = "mkdir DIR1 [DIR2...] "
+        + "\n\tCreate directories, each of which may be relative to the "
+        + "\n\tcurrent directory or may be a full path.";
+    assertEquals(documentation + "\n", man.execute(new String[] {"mkdir"}));
+    documentation = "man CMD" + "\n\tPrint documentation for CMD(s)";
+    assertEquals(documentation + "\n", man.execute(new String[] {"man"}));
+  }
+
+
+
+}

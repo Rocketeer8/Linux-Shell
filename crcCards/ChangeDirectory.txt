@@ -1,0 +1,11 @@
+Class name: ChangeDirectory
+Parent class (if any): Command
+Subclasses (if any): None
+
+Responsibilities:
+*Changes directories to a specified location (given a path)
+
+Collaborators:
+*FileSystem
+*InputParser
+*Directory
