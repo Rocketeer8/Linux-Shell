@@ -11,7 +11,7 @@
 Supported Linux Commands: exit, mkdir, ls, history, pushd, popd, pwd, man, cat, cd, echo, saveJShell, loadJShell, tree, search, curl, rm, mv, cp
 
 # What I Learned
-- Key Java Design patterns such as Polymorphism, Singleton, Iterator
+- Key Java Design patterns such as Polymorphism, Singleton, and Iterator.
 - Effectively collaborate using Scrum (an agile methodology), which includes creating Project Backlogs, Sprint Backlogs, and Scrum meeting notes (can be found on Replit Repo).
-- Common Linux commands and their functionalities
+- Common Linux commands and their functionalities.
 
