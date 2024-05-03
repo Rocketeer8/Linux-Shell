@@ -1,7 +1,7 @@
 # Description
  Developed Linux mock shell in Java capable of running 19 different commands. utilized key design patterns and Agile methodologies, robust error handling using JUnit.
 
-# Instruction to run
+# Instruction to Run
 1. Open the URL (https://replit.com/@hailiu5/Linux-Shell)
 2. Click "Fork & Run", Sign-Up or Log-in if necessary, then click "Fork Repl"
 3. Open a Linux terminal on the right-hand side (you can do so by clicking on the "Shell" tab next to the Console)
